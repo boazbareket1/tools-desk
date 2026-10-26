@@ -1,0 +1,432 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>שולחן הכלים - בועז בר-קת | כל הכלים במקום אחד</title>
+<meta name="description" content="שולחן הכלים של בועז בר-קת: אינדקס של כל הכלים האינטראקטיביים - מוזיקה ויצירה, כלים למטפלים ולעיבוד רגשי, ידע עצמי, הנחיית קבוצות ומשחקי חברה. עם סטטוס לכל כלי, חיפוש והערות לשיפור.">
+<meta name="theme-color" content="#0e6a5f">
+<meta property="og:type" content="website">
+<meta property="og:title" content="שולחן הכלים - בועז בר-קת">
+<meta property="og:description" content="אינדקס של כל הכלים האינטראקטיביים, לפי תחומים.">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230e6a5f'/%3E%3Cpath d='M16 22h32M16 32h32M16 42h32' stroke='%23fff' stroke-width='5' stroke-linecap='round'/%3E%3C/svg%3E">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@700&family=Rubik:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
+<style>
+/* Layout: a studio console. Each category is a channel strip of tool rows; every tool has a status LED (live / in progress / idea) and a note slot for improvement remarks. */
+:root{
+  --bg:#e9ecea; --panel:#f8faf9; --ink:#1b2422; --muted:#5d6b67; --line:#cfd6d3;
+  --accent:#0e6a5f; --accent-soft:#d6e9e5; --note:#b8590f; --note-soft:#f6e3d2;
+  --led-live:#24a165; --led-dev:#d4950f; --led-idea:#9aa5a2; --wa:#0f7a45;
+  --display:"Karantina","Rubik",system-ui,sans-serif;
+  --body:"Rubik",system-ui,"Segoe UI",Arial,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#141a19; --panel:#1c2423; --ink:#e4ebe8; --muted:#97a6a1; --line:#2d3a37;
+  --accent:#5cc4b4; --accent-soft:#1d3532; --note:#f0a060; --note-soft:#3a2a1c;
+  --led-live:#3fd18a; --led-dev:#f2b632; --led-idea:#6c7975; --wa:#4ad08a; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#141a19; --panel:#1c2423; --ink:#e4ebe8; --muted:#97a6a1; --line:#2d3a37;
+  --accent:#5cc4b4; --accent-soft:#1d3532; --note:#f0a060; --note-soft:#3a2a1c;
+  --led-live:#3fd18a; --led-dev:#f2b632; --led-idea:#6c7975; --wa:#4ad08a; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
+.wrap{max-width:980px;margin:0 auto;display:grid;gap:22px}
+h1,h2{font-family:var(--display);font-weight:700;margin:0;line-height:1;text-wrap:balance}
+h1{font-size:clamp(46px,10vw,72px)}
+h2{font-size:clamp(32px,6vw,40px)}
+p{margin:0}
+button,input,textarea,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.muted{color:var(--muted)}
+.mono{font-family:var(--mono);font-variant-numeric:tabular-nums}
+
+header{padding-top:28px;display:grid;gap:6px}
+.sub{color:var(--muted);max-width:60ch}
+.meters{display:flex;gap:18px;flex-wrap:wrap;font-size:14px;color:var(--muted);margin-top:6px}
+.meters span{display:inline-flex;align-items:center;gap:7px}
+
+.led{width:10px;height:10px;border-radius:50%;flex:none;background:var(--led-idea)}
+.led.live{background:var(--led-live);box-shadow:0 0 6px var(--led-live)}
+.led.dev{background:var(--led-dev);box-shadow:0 0 6px var(--led-dev)}
+
+/* controls */
+.controls{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);padding-block:10px;display:grid;gap:10px;border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+.search{width:100%;border:1px solid var(--line);background:var(--panel);border-radius:10px;padding:10px 14px;font-size:16px}
+.chips{display:flex;gap:6px;overflow-x:auto;padding-bottom:2px;scrollbar-width:thin;align-items:center}
+#board{width:100%}
+.chip{flex:none;border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:6px 14px;font-size:14.5px;font-weight:500;white-space:nowrap;line-height:1.3;height:auto}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip .n{font-family:var(--mono);font-size:12px;opacity:.7;margin-inline-start:6px}
+.chip.notes[aria-pressed="false"]{color:var(--note);border-color:var(--note)}
+
+/* inbox of open notes */
+.inbox{background:var(--note-soft);border-radius:14px;padding:16px 18px;display:grid;gap:10px}
+.inbox-head{display:flex;justify-content:space-between;gap:10px;align-items:baseline;flex-wrap:wrap}
+.inbox-head b{color:var(--note);font-size:17px}
+.inbox ul{margin:0;padding:0;list-style:none;display:grid;gap:6px}
+.inbox li{display:flex;gap:8px;align-items:baseline;font-size:15px;min-width:0}
+.inbox li .t{font-weight:600;flex:none}
+.inbox li .x{min-width:0;overflow-wrap:anywhere}
+.hint{font-size:13.5px;color:var(--muted)}
+
+/* channel strips */
+.channel{display:grid;gap:10px}
+.ch-head{display:flex;align-items:baseline;justify-content:space-between;gap:10px;border-bottom:2px solid var(--ink);padding-bottom:6px}
+.ch-head .desc{font-size:14px;color:var(--muted)}
+.rows{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:10px}
+.tool{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px;align-content:start;min-width:0}
+.tool.has-notes{border-color:var(--note)}
+.t-top{display:flex;gap:10px;align-items:center;min-width:0}
+.t-name{font-weight:600;font-size:17px;min-width:0;overflow-wrap:anywhere;flex:1}
+.t-state{font-size:12.5px;color:var(--muted);white-space:nowrap}
+.t-desc{font-size:14.5px;color:var(--muted);overflow-wrap:anywhere}
+.t-url{font-family:var(--mono);font-size:12px;color:var(--muted);direction:ltr;text-align:right;overflow-wrap:anywhere}
+.t-url .q{color:var(--note);font-family:var(--body)}
+.t-actions{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.btn{border:1.5px solid var(--accent);background:var(--accent);color:var(--panel);border-radius:999px;padding:6px 14px;font-weight:600;font-size:14.5px;text-decoration:none;display:inline-flex;align-items:center;gap:6px}
+.btn.ghost{background:transparent;color:var(--accent)}
+.btn.note{border-color:var(--note);background:transparent;color:var(--note)}
+.btn.wa{border-color:var(--wa);background:transparent;color:var(--wa)}
+.tpl{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:8px}
+.tpl summary{cursor:pointer;font-weight:600}
+.tpl textarea{min-height:150px}
+.tpl .hint b{font-family:var(--mono);font-weight:500}
+.btn.small{padding:4px 10px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.icon-btn{border:0;background:none;color:var(--muted);padding:4px 6px;border-radius:6px;font-size:14px}
+.icon-btn:hover{color:var(--ink);background:var(--accent-soft)}
+.badge{font-family:var(--mono);font-size:12px;background:var(--note);color:var(--panel);border-radius:999px;padding:1px 8px}
+
+/* notes inside a tool */
+.notes{display:grid;gap:6px;border-top:1px dashed var(--line);padding-top:8px}
+.note-row{display:grid;grid-template-columns:auto 1fr auto;gap:8px;align-items:start;font-size:14.5px}
+.note-row input{width:18px;height:18px;margin-top:3px;accent-color:var(--accent)}
+.note-row .txt{overflow-wrap:anywhere;min-width:0}
+.note-row.done .txt{color:var(--muted)}
+.note-row .when{display:block;font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+textarea{width:100%;border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:8px 10px;font-size:15px;resize:vertical;min-height:64px}
+.composer{display:grid;gap:6px}
+
+/* edit form */
+.edit{display:grid;gap:8px;border-top:1px dashed var(--line);padding-top:8px}
+.edit label{display:grid;gap:3px;font-size:13px;color:var(--muted)}
+.edit input[type=text],.edit input[type=url],.edit select{border:1px solid var(--line);background:var(--bg);border-radius:8px;padding:7px 10px;font-size:15px;color:var(--ink);width:100%}
+.edit input[type=url]{direction:ltr;text-align:left}
+.cats{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:14px;color:var(--ink)}
+.cats label{display:inline-flex;align-items:center;gap:5px;font-size:14px;color:var(--ink)}
+.danger{color:#c0392b}
+
+.add-tool{border:1.5px dashed var(--line);background:transparent;border-radius:12px;padding:14px;color:var(--muted);font-weight:500;min-height:64px}
+.add-tool:hover{border-color:var(--accent);color:var(--accent)}
+
+.empty{background:var(--panel);border:1px dashed var(--line);border-radius:12px;padding:22px;text-align:center;color:var(--muted)}
+.copybox textarea{min-height:140px}
+.n-acts{display:flex;gap:2px;align-items:center}
+.icon-btn.ask{color:var(--accent);font-size:13px;font-weight:600;white-space:nowrap}
+.note-row .reply{display:block;margin-top:3px;font-size:13.5px;color:var(--accent);text-decoration:none}
+.g-share{display:flex;gap:8px 14px;align-items:center;flex-wrap:wrap}
+.g-view{font-size:14px;color:var(--accent);font-weight:500}
+.toast{position:fixed;bottom:calc(18px + env(safe-area-inset-bottom,0px));left:50%;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:8px 16px;border-radius:999px;font-size:14px;z-index:20}
+footer{font-size:13.5px;color:var(--muted);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:480px){.rows{grid-template-columns:1fr}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+
+<div class="wrap">
+  <header>
+    <h1>שולחן הכלים</h1>
+    <p class="sub">כל הכלים במקום אחד, לפי תחומים. נכנסים לכלי, משתמשים, ורושמים הערה לשיפור ליד הכלי עצמו.</p>
+    <div class="meters" id="meters">
+      <span><i class="led live"></i>באוויר</span>
+      <span><i class="led dev"></i>בפיתוח</span>
+      <span><i class="led"></i>רעיון</span>
+    </div>
+  </header>
+
+  <div class="controls">
+    <input class="search" id="search" type="search" placeholder="חיפוש כלי לפי שם או תיאור" aria-label="חיפוש כלי">
+    <div class="chips" id="chips" role="toolbar" aria-label="סינון לפי תחום"></div>
+  </div>
+
+  <section class="inbox" id="inbox" hidden aria-labelledby="inboxTitle"></section>
+
+  <main id="board" class="wrap" style="gap:28px">
+    <div class="empty" id="loading">טוען את רשימת הכלים…</div>
+  </main>
+
+  <details class="tpl" id="tplBox">
+    <summary>נוסח הודעת הוואטסאפ לחברים</summary>
+    <p class="hint">זו ההודעה שנפתחת בוואטסאפ כשלוחצים "לשלוח בוואטסאפ". המילים <b>{שם}</b>, <b>{תיאור}</b> ו<b>{קישור}</b> מתחלפות בפרטי הכלי. לפני השליחה אפשר לשנות את הנוסח גם בוואטסאפ עצמו.</p>
+    <textarea id="tplText" aria-label="נוסח ההודעה"></textarea>
+    <div class="t-actions"><button class="btn small" id="tplSave" type="button">שמירת הנוסח</button><button class="btn ghost small" id="tplReset" type="button">חזרה לנוסח המקורי</button></div>
+  </details>
+
+  <footer>ההערות והעריכות נשמרות בדפדפן הזה בלבד, ונשארות גם כשסוגרים את הדף.</footer>
+</div>
+<div class="toast" id="toast" hidden></div>
+
+<script>
+/* Standalone storage: replaces the Claude database with the browser's localStorage */
+(function(){
+const KEY="toolsdesk.v1",SEED={"tsmatei-bechira": {"cats": ["therapy"], "desc": "משחק החלטות מסתעף שבונה מסע ערכים יומי · נפתח מתוך ערכת הכלים לעיבוד רגשי", "name": "צמתי בחירה", "order": 7, "status": "live", "url": "https://boazbareket1.github.io/emotionToolbox/"}, "esotrivia": {"cats": ["party", "groups"], "desc": "טריוויה מוקרנת: כל משתתף כותב שאלה ומדרג את האחרות", "name": "איזוטרוויה", "order": 1, "status": "dev", "url": ""}, "chakra-compass": {"cats": ["self"], "desc": "מסע תלת־ממדי בין מרכזי האנרגיה בגוף, שבסופו נבנה מסע אנרגטי אישי.", "guess": false, "name": "נתיב האור", "order": 3, "status": "live", "url": "https://boazbareket1.github.io/chakra-compass/"}, "mazalot": {"cats": ["self"], "desc": "מזינים תאריך לידה, מגלים את תכונות המזל, מדרגים מה נוכח בך ומה חשוב לך, בודקים התאמה זוגית ושולחים לעצמך סיכום אישי.", "guess": false, "name": "מזלות", "order": 7, "status": "live", "url": "https://boazbareket1.github.io/Mazalot/"}, "astro-map": {"cats": ["self"], "desc": "מפת לידה אסטרולוגית", "name": "מפה אסטרולוגית", "order": 6, "status": "idea", "url": ""}, "tanpura-stage": {"cats": ["music"], "desc": "ליווי חי להופעות ולאלתור: טנפורה, פדים וביטים באותו סולם, ישר מהדפדפן.", "guess": false, "name": "Tanpura Stage", "order": 3, "status": "dev", "url": "https://boazbareket1.github.io/tanpura-stage/"}, "emotion-combo": {"cats": ["therapy"], "desc": "מרכיבים מקלפים את צירוף הרגשות של הרגע, ומשתפים אותו במילים.", "guess": false, "name": "קומבינציית רגשות", "order": 4, "status": "live", "url": "https://boazbareket1.github.io/emotion-combo/emotion-combo%20(2).html"}, "garage-sale": {"cats": ["general"], "desc": "שוק יד שנייה שבו סוכן מתמקח וקובע איסוף", "name": "הגראז' סייל", "order": 2, "status": "idea", "url": ""}, "politikalpi": {"cats": ["general"], "desc": "איזו מפלגה הכי קרובה לעמדות שלך, בחירות לכנסת ה־26", "name": "פוליטיקלפי", "order": 1, "shareMsg": "הבחירות כבר ביום שלישי 🗳️\nלא בטוחים למי להצביע? בניתי כלי שעוזר לגלות איזו מפלגה הכי קרובה לעמדות שלכם: 14 שאלות קצרות, 3 דקות, בלי הרשמה.\n\nhttps://boazbareket1.github.io/politikalpi/?s=wa\n\nאחרי שתנסו, כתבו לי פה מה יצא לכם ומה הייתם משפרים. ואם זה עזר, תעבירו הלאה 🙏", "status": "live", "url": "https://boazbareket1.github.io/politikalpi/"}, "harmony-loop": {"cats": ["music"], "desc": "סקוונסר הרמוני עם סגנונות: ג'אז, גוספל, בוסה נובה", "name": "Harmony Loop Master", "order": 5, "status": "dev", "url": ""}, "numerology": {"cats": ["self"], "desc": "ניתוח אישיות לפי תאריך הלידה והשם, בגימטריה עברית ובשיטה הפיתגוראית, כולל התאמה זוגית ותחזית.", "guess": false, "name": "מפת המספרים", "order": 1, "status": "live", "url": "https://boazbareket1.github.io/numerology-map/"}, "scale-circle": {"cats": ["music"], "desc": "מעגל סולמות אינטראקטיבי עם השמעה", "name": "מעגל הסולמות", "order": 6, "status": "dev", "url": ""}, "bediyuk-baerech": {"cats": ["party", "general"], "desc": "משחק חידות בוויקיפדיה: קוראים ערכים, אוספים רמזים ומגלים ערכים נסתרים שיחד פותרים חידה גדולה.", "name": "בדיוק בערך", "order": 2, "status": "live", "url": "https://boazbareket1.github.io/bediyuk-baerech/"}, "family-weave": {"cats": ["groups"], "desc": "מעגל התפתחות נומרולוגי: כל אחד מצטרף בסריקת QR ומקבל מפה אישית, ויחד חושפים שליחות, תפקידים, חוטים וחיכוכים. כולל תצוגת הנחיה להקראה ומשחק זיהוי.", "guess": false, "name": "המארג המשפחתי", "order": 2, "status": "dev", "url": "https://boazbareket1.github.io/family-weave/"}, "core-theme": {"cats": ["therapy"], "desc": "חקירה עצמית לפי ספירלת LTT: מסיפור חיים פתוח, דרך שמונה תחנות, אל גרעין הנושא. סבבים חוזרים, שמירה אוטומטית, וייצוא ל-Word.", "guess": false, "name": "גרעין הנושא", "order": 8, "status": "dev", "url": "https://boazbareket1.github.io/gerein-hanose/"}, "values-galaxy": {"cats": ["therapy", "self"], "desc": "מסע תלת־ממדי בין כוכבים, שבכל אחד מהם מחכה ערך או תובנה.", "name": "מפת התובנות", "order": 5, "status": "live", "url": "https://boazbareket1.github.io/values-galaxy/"}, "values-ladder": {"cats": ["therapy"], "desc": "תרגול חיבור ערך קוסמי לפער שמתחת לקושי", "name": "סולם הערכים", "order": 10, "status": "dev", "url": ""}, "digitwin": {"cats": ["general"], "desc": "ראיונות לבניית תאום דיגיטלי", "name": "DigiTwin", "order": 3, "status": "idea", "url": ""}, "fruty-beat": {"cats": ["music", "party"], "desc": "משחק קצב עם פירות: מרכיבים תיבות מקצב מקלפי פירות ושומעים אותן מתנגנות.", "name": "Beat It · FrutyBeat", "order": 4, "status": "live", "url": "https://boazbareket1.github.io/Fruty-Beat-It/"}, "moon-village": {"cats": ["general"], "desc": "כפר למידה וירטואלי", "name": "Moon Village", "order": 4, "status": "idea", "url": ""}, "mah-korgesh": {"cats": ["therapy"], "desc": "משחק קלפים שמפרק אירוע לפרשנות, רגש ותוצאה, ומזמין לבחור מחשבה אחרת.", "name": "מה קו-רגש", "order": 2, "status": "live", "url": "https://boazbareket1.github.io/mah-korgesh/"}, "emotion-toolbox": {"cats": ["therapy"], "desc": "שער אחד לכל משחקי העיבוד הרגשי, למטפלים ולמי שרוצה להתבונן פנימה.", "guess": false, "name": "ערכת כלים לעיבוד רגשי", "order": 1, "status": "live", "url": "https://boazbareket1.github.io/emotionToolbox/"}, "haderech": {"cats": ["therapy"], "desc": "מעקב משותף למטפל ולמטופל לפי מודל הטרנספורמציה", "name": "הדרך שלנו", "order": 9, "status": "dev", "url": ""}, "shminiot": {"cats": ["groups"], "desc": "שלד המפגשים: השפע שלי, חברות, תודעה ומציאות, הקשבה", "guess": false, "name": "השמיניות", "order": 1, "status": "live", "url": "https://boazbareket1.github.io/shminiot/"}, "magic-square": {"cats": ["therapy"], "desc": "נשמע, נטמיע, נגבה, נעשה", "name": "ריבוע הקסם", "order": 11, "status": "idea", "url": ""}, "oganim": {"cats": ["therapy"], "desc": "פאזל אותיות שבו מרכיבים משפט מפתח מחזק, עם שאלה למחשבה בסוף כל חידה.", "name": "עוגנים", "order": 6, "status": "live", "url": "https://boazbareket1.github.io/OGANIM/"}, "meeting-sync": {"cats": ["therapy", "groups"], "desc": "כל אחד מסמן מתי הוא פנוי, ורואים מיד מתי כולם יכולים להיפגש. בלי הרשמה.", "guess": false, "name": "מתאם הזמנים", "order": 12, "status": "live", "url": "https://boazbareket1.github.io/meeting-sync/"}, "loop-lab": {"cats": ["music"], "desc": "מחולל לופים הרמוניים לאלתור, עם המלצות על סולמות שכדאי לנסות מעל כל אקורד.", "guess": false, "name": "Loop Lab", "order": 2, "status": "dev", "url": "https://boazbareket1.github.io/loop-lab/"}, "grapholog": {"cats": ["self"], "desc": "כותבים דף ביד, מצלמים, ומקבלים קריאה של הכתב והאישיות ונקודות למחשבה.", "name": "הגרפולוג", "order": 2, "status": "live", "url": "https://boazbareket1.github.io/grapholog/"}, "maagal-hagashama": {"cats": ["therapy", "self"], "desc": "משחק קלפים להתבוננות עצמית: ארבע משבצות וארבעים קלפים, שמובילים ממה שעל פני השטח אל מה שמתחתיו.", "guess": false, "name": "מעגל הגשמה", "order": 5, "status": "live", "url": "https://boazbareket1.github.io/maagal-hagashama/"}, "palm": {"cats": ["self"], "desc": "קווי החיים, הלב והראש וצורת היד", "name": "קריאה בכף היד", "order": 4, "status": "dev", "url": ""}, "qualitystars": {"cats": ["therapy"], "desc": "נכנסים לחדר של איכות כמו רוך, אמון או נדיבות, ומעבדים דרכה אירוע שהפעיל אותנו.", "name": "גלקסיית האיכויות", "order": 3, "status": "live", "url": "https://boazbareket1.github.io/qualitystars/galaxy_of_qualities_4.html"}, "fill-drill": {"cats": ["music"], "desc": "מאמן מעברים בתופים: בונים מעבר על גריד צבעוני, בוחרים טמפו ומתרגלים עם מטרונום.", "guess": false, "name": "Fill Drill", "order": 1, "status": "dev", "url": "https://boazbareket1.github.io/fill-drill/"}};
+let S;try{S=JSON.parse(localStorage.getItem(KEY)||"null")}catch(e){S=null}
+if(!S||!S.tools)S={tools:SEED,notes:{},settings:{}};
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const subs={tools:[],notes:[],settings:[]};
+const snap=c=>({docs:Object.entries(S[c]).map(([id,d])=>({id,data:()=>d}))});
+const fire=c=>subs[c].forEach(f=>f(snap(c)));
+const rid=()=>"n"+Date.now().toString(36)+Math.random().toString(36).slice(2,6);
+const db={
+  collection:c=>({
+    onSnapshot(cb){subs[c].push(cb);cb(snap(c));return()=>{}},
+    async add(d){S[c][rid()]=d;save();fire(c)}
+  }),
+  doc(p){const [c,id]=p.split("/");return{
+    onSnapshot(cb){const f=()=>{const d=S[c][id];cb({exists:!!d,data:()=>d})};subs[c].push(f);f();return()=>{}},
+    async set(d){S[c][id]=d;save();fire(c)},
+    async update(d){S[c][id]=Object.assign({},S[c][id],d);save();fire(c)},
+    async delete(){delete S[c][id];save();fire(c)}
+  }}
+};
+window.claude={use:async k=>k==="db"?db:null};
+})();
+</script>
+<script>
+const CATS=[
+  {id:"music",  name:"מוזיקה ויצירה",       desc:"תרגול, הוראה וליווי בהופעות"},
+  {id:"therapy",name:"מטפלים ועיבוד רגשי",  desc:"כלים לחדר הטיפול ומשחקי עיבוד רגשי"},
+  {id:"self",   name:"ידע עצמי",            desc:"נומרולוגיה, גרפולוגיה, צ'אקרות, כף יד ומזלות"},
+  {id:"groups", name:"הנחיית קבוצות",       desc:"מפגשי השמיניות וכלים למנחים"},
+  {id:"party",  name:"משחקי חברה",          desc:"משחקים מוקרנים בסגנון קהוט וטריוויה"},
+  {id:"general",name:"כלים לכולם ופרויקטים", desc:"כלים לקהל הרחב ורעיונות גדולים"}
+];
+const STATUS={live:"באוויר",dev:"בפיתוח",idea:"רעיון"};
+const DEFAULT_TPL="היי 🙂\nאני מפתח כלי חדש בשם {שם}.\n{תיאור}\n\nהכלי עדיין בשלב פיתוח. בחרתי לשלוח לך אותו כי אני מאוד מעריך את הדעה שלך, וזה בדיוק המשוב שהכלי צריך עכשיו.\n\n{קישור}\n\nאם יש לך כמה דקות לנסות, אשמח לשמוע כאן מה עבד, מה היה מבלבל ומה כדאי לשפר. כל הערה תתקבל באהבה 🙏\nבהמשך הכלי יעבור לשלב הבא, ואעדכן.";
+const shareUrl=u=>u+(u.includes("?")?"&":"?")+"s=wa";
+let shareTpl=DEFAULT_TPL;
+function msgText(t){
+  if(t.shareMsg&&t.shareMsg.trim())return t.shareMsg;
+  let m=shareTpl;
+  m=t.desc?m.split("{תיאור}").join(t.desc):m.replace(/:\s*\{תיאור\}/g,"").split("{תיאור}").join("");
+  return m.split("{שם}").join(t.name).split("{קישור}").join(shareUrl(t.url));
+}
+const waLink=t=>"https://wa.me/?text="+encodeURIComponent(msgText(t));
+const GROUPS={
+  music:{title:"כלים להוראת מוזיקה ויצירה",n:4},
+  therapy:{title:"כלים למטפלים ולעיבוד רגשי",n:8},
+  self:{title:"כלים לידע עצמי",n:5},
+  groups:{title:"כלים להנחיית קבוצות",n:2}
+};
+const groupUrl=id=>"https://boazbareket1.github.io/access-gate/kelim/"+id+".html";
+function groupMsg(id){
+  const g=GROUPS[id];
+  return "שלום 🙂\nקודם כול, תודה שהסכמת להיות מהראשונים להשתמש בכלים שאני מפתח ולשתף אותי במשוב. זה חשוב לי מאוד.\n\n"+
+    "ריכזתי עבורך בדף אחד את ה"+g.title+" ("+g.n+" כלים):\n"+shareUrl(groupUrl(id))+"\n\n"+
+    "ההמלצה שלי: להתחיל בכלי אחד, להשתמש בו לעומק ולשלוח לי משוב כאן בוואטסאפ, ורק אז להעמיק בכלי הבא. הדף יעזור לעקוב אחרי ההתקדמות.\n\n"+
+    "תודה על שיתוף הפעולה 🙏\nבועז";
+}
+async function copyGroup(id,btn){
+  const text=groupMsg(id);
+  try{await navigator.clipboard.writeText(text);toast("ההזמנה הועתקה. עבור לוואטסאפ, בחר צ'אט והדבק (Ctrl+V)");return}catch(e){}
+  const sec=btn.closest(".channel");let box=sec.querySelector(".copybox");
+  if(!box){box=document.createElement("div");box.className="composer copybox";box.innerHTML='<p class="hint">סמן את הטקסט (Ctrl+A), העתק (Ctrl+C) והדבק בוואטסאפ:</p><textarea readonly></textarea>';sec.querySelector(".ch-head").after(box)}
+  const ta=box.querySelector("textarea");ta.value=text;ta.focus();ta.select();
+}
+function groupBtn(id){
+  if(!GROUPS[id])return "";
+  const label="שיתוף הקבוצה לאנשי מקצוע";
+  const main=isPhone
+    ?`<a class="btn wa small" href="${esc("https://wa.me/?text="+encodeURIComponent(groupMsg(id)))}" target="_blank" rel="noopener">${label}</a>`
+    :`<button class="btn wa small" data-group="${id}" type="button">${label}</button>`;
+  return `<span class="g-share">${main}<a class="g-view" href="${groupUrl(id)}" target="_blank" rel="noopener">לראות את דף הקבוצה ↗</a></span>`;
+}
+let isPhone=false;try{isPhone=matchMedia("(pointer:coarse)").matches&&matchMedia("(max-width:900px)").matches}catch(e){}
+async function copyMsg(t,btn){
+  const text=msgText(t);
+  try{await navigator.clipboard.writeText(text);toast("ההודעה הועתקה. עבור לוואטסאפ, בחר צ'אט והדבק (Ctrl+V)");return}
+  catch(e){}
+  const card=btn.closest(".tool");let box=card.querySelector(".copybox");
+  if(!box){box=document.createElement("div");box.className="composer copybox";box.innerHTML='<p class="hint">סמן את הטקסט (Ctrl+A), העתק (Ctrl+C) והדבק בוואטסאפ:</p><textarea readonly></textarea>';card.appendChild(box)}
+  const ta=box.querySelector("textarea");ta.value=text;ta.focus();ta.select();
+}
+const $=s=>document.querySelector(s);
+const esc=s=>String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+let tools=[],notes=[],db=null,canWrite=true;
+let filter="all",query="";
+const open={notes:new Set(),edit:new Set(),compose:new Set()};
+try{filter=localStorage.getItem("desk.filter")||"all"}catch(e){}
+
+function toast(t){const el=$("#toast");el.textContent=t;el.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>el.hidden=true,1800)}
+const fmt=ms=>{try{return new Date(ms).toLocaleDateString("he-IL",{day:"numeric",month:"numeric",year:"2-digit"})}catch(e){return""}};
+const openNotes=id=>notes.filter(n=>n.toolId===id&&!n.done);
+const toolNotes=id=>notes.filter(n=>n.toolId===id).sort((a,b)=>(a.done-b.done)||(b.createdAt-a.createdAt));
+
+function renderChips(){
+  const cnt=id=>tools.filter(t=>(t.cats||[]).includes(id)).length;
+  const openCount=notes.filter(n=>!n.done).length;
+  $("#chips").innerHTML=[`<button class="chip" data-f="all" aria-pressed="${filter==="all"}">הכול<span class="n">${tools.length}</span></button>`]
+    .concat(CATS.map(c=>`<button class="chip" data-f="${c.id}" aria-pressed="${filter===c.id}">${c.name}<span class="n">${cnt(c.id)}</span></button>`))
+    .concat(`<button class="chip notes" data-f="notes" aria-pressed="${filter==="notes"}">עם הערות פתוחות<span class="n">${openCount}</span></button>`).join("");
+}
+
+function renderInbox(){
+  const open_=notes.filter(n=>!n.done).sort((a,b)=>b.createdAt-a.createdAt);
+  const box=$("#inbox");
+  if(!open_.length){box.hidden=true;return}
+  box.hidden=false;
+  const name=id=>tools.find(t=>t.id===id)?.name||"כללי";
+  box.innerHTML=`<div class="inbox-head"><b id="inboxTitle">${open_.length} הערות לשיפור מחכות לטיפול</b><span class="hint">ההערות האחרונות</span></div>
+    <ul>${open_.slice(0,5).map(n=>`<li><span class="t">${esc(name(n.toolId))}:</span><span class="x">${esc(n.text)}</span></li>`).join("")}</ul>
+    ${open_.length>5?`<button class="btn note small" data-f="notes" type="button">לכל ${open_.length} ההערות</button>`:""}`;
+}
+
+function toolCard(t){
+  const on=openNotes(t.id),all=toolNotes(t.id);
+  const st=t.status||"idea";
+  const urlLine=t.url?`<p class="t-url">${esc(t.url.replace(/^https?:\/\//,""))}${t.guess?` <span class="q">· קישור משוער, כדאי לבדוק</span>`:""}</p>`:"";
+  const notesOpen=open.notes.has(t.id);
+  let h=`<article class="tool ${on.length?"has-notes":""}" data-id="${esc(t.id)}">
+    <div class="t-top"><i class="led ${st==="idea"?"":st}" title="${STATUS[st]}"></i><span class="t-name">${esc(t.name)}</span><span class="t-state">${STATUS[st]}</span>
+      ${canWrite?`<button class="icon-btn" data-act="edit" type="button" aria-label="עריכת ${esc(t.name)}">✎</button>`:""}</div>
+    ${t.desc?`<p class="t-desc">${esc(t.desc)}</p>`:""}
+    ${urlLine}
+    <div class="t-actions">
+      ${t.url?`<a class="btn" href="${esc(t.url)}" target="_blank" rel="noopener">כניסה לכלי ↗</a>`:`<button class="btn" disabled type="button">אין קישור עדיין</button>`}
+      ${t.url?(isPhone?`<a class="btn wa" href="${esc(waLink(t))}" target="_blank" rel="noopener" aria-label="שליחת ${esc(t.name)} לחבר בוואטסאפ">לשלוח בוואטסאפ</a>`:`<button class="btn wa" data-act="copy" type="button" aria-label="העתקת הודעת שיתוף של ${esc(t.name)}">העתקה לוואטסאפ</button>`):""}
+      ${canWrite?`<button class="btn note" data-act="compose" type="button">+ הערה</button>`:""}
+      ${all.length?`<button class="btn ghost small" data-act="notes" type="button" aria-expanded="${notesOpen}">הערות ${on.length?`<span class="badge">${on.length}</span>`:`<span class="mono">${all.length}</span>`}</button>`:""}
+    </div>`;
+  if(open.compose.has(t.id)) h+=`<div class="composer">
+      <textarea id="c-${esc(t.id)}" placeholder="מה כדאי לשפר ב${esc(t.name)}? אפשר להדביק כאן תגובה של חבר מוואטסאפ" aria-label="הערה לשיפור"></textarea>
+      <div class="t-actions"><button class="btn small" data-act="save-note" type="button">שמירת ההערה</button><button class="btn ghost small" data-act="compose" type="button">ביטול</button></div></div>`;
+  if(notesOpen&&all.length) h+=`<div class="notes">${all.map(n=>`<div class="note-row ${n.done?"done":""}">
+      <input type="checkbox" id="n-${esc(n.id)}" data-note="${esc(n.id)}" ${n.done?"checked":""} ${canWrite?"":"disabled"} aria-label="סימון כטופל">
+      <label class="txt" for="n-${esc(n.id)}">${esc(n.text)}<span class="when">${fmt(n.createdAt)}${n.done?" · טופל":""}</span>${n.reply?`<span class="reply">Claude: ${esc(n.reply)}</span>`:""}</label>
+      <span class="n-acts">${n.done?"":`<button class="icon-btn ask" data-ask="${esc(n.id)}" type="button" title="העתקת בקשה לשיחה עם Claude">לטיפול ←</button>`}${canWrite?`<button class="icon-btn" data-del-note="${esc(n.id)}" type="button" aria-label="מחיקת ההערה">✕</button>`:""}</span></div>`).join("")}</div>`;
+  if(open.edit.has(t.id)) h+=editForm(t);
+  return h+`</article>`;
+}
+
+function editForm(t){
+  const id=esc(t.id);
+  return `<div class="edit">
+    <label for="e-name-${id}">שם<input type="text" id="e-name-${id}" value="${esc(t.name)}"></label>
+    <label for="e-url-${id}">קישור<input type="url" id="e-url-${id}" value="${esc(t.url||"")}" placeholder="https://boazbareket1.github.io/..."></label>
+    <label for="e-desc-${id}">תיאור קצר<input type="text" id="e-desc-${id}" value="${esc(t.desc||"")}"></label>
+    <label for="e-msg-${id}">הודעת וואטסאפ מיוחדת לכלי הזה (ריק = הנוסח הכללי)<textarea id="e-msg-${id}">${esc(t.shareMsg||"")}</textarea></label>
+    <label for="e-st-${id}">מצב<select id="e-st-${id}">${Object.entries(STATUS).map(([k,v])=>`<option value="${k}" ${t.status===k?"selected":""}>${v}</option>`).join("")}</select></label>
+    <div class="cats" role="group" aria-label="תחומים">${CATS.map(c=>`<label><input type="checkbox" id="e-cat-${id}-${c.id}" value="${c.id}" ${(t.cats||[]).includes(c.id)?"checked":""}>${c.name}</label>`).join("")}</div>
+    <div class="t-actions"><button class="btn small" data-act="save-edit" type="button">שמירה</button><button class="btn ghost small" data-act="edit" type="button">ביטול</button>
+      <button class="icon-btn danger" data-act="delete" type="button">מחיקת הכלי</button></div></div>`;
+}
+
+function render(){
+  const drafts={};document.querySelectorAll(".composer textarea, .edit input, .edit select").forEach(el=>{drafts[el.id]=el.type==="checkbox"?el.checked:el.value});
+  const focused=document.activeElement?.id;
+  renderInner();
+  for(const [k,v] of Object.entries(drafts)){const el=document.getElementById(k);if(el){if(el.type==="checkbox")el.checked=v;else el.value=v}}
+  if(focused)document.getElementById(focused)?.focus();
+}
+function renderInner(){
+  renderChips();renderInbox();
+  const q=query.trim();
+  const match=t=>!q||(t.name+" "+(t.desc||"")).includes(q);
+  const board=$("#board");
+  if(!tools.length){board.innerHTML=`<div class="empty">${db?"עוד אין כלים ברשימה. הוסף את הראשון בכפתור למטה.":"טוען את רשימת הכלים…"}</div>${db&&canWrite?addBtn("general"):""}`;return}
+  let cats=filter==="all"||filter==="notes"?CATS:CATS.filter(c=>c.id===filter);
+  let html=cats.map(c=>{
+    let list=tools.filter(t=>(t.cats||[]).includes(c.id)&&match(t));
+    if(filter==="notes")list=list.filter(t=>openNotes(t.id).length);
+    if((q||filter==="notes")&&!list.length)return"";
+    list.sort((a,b)=>({live:0,dev:1,idea:2}[a.status]-{live:0,dev:1,idea:2}[b.status])||(a.order??99)-(b.order??99));
+    return `<section class="channel" aria-labelledby="h-${c.id}"><div class="ch-head"><h2 id="h-${c.id}">${c.name}</h2><span class="desc">${c.desc}</span></div>${groupBtn(c.id)}
+      <div class="rows">${list.map(toolCard).join("")}${canWrite&&!q&&filter!=="notes"?addBtn(c.id):""}</div></section>`;
+  }).join("");
+  board.innerHTML=html||`<div class="empty">${filter==="notes"?"אין הערות פתוחות. הכול טופל.":"לא נמצא כלי שמתאים לחיפוש."}</div>`;
+}
+const addBtn=cat=>`<button class="add-tool" data-add="${cat}" type="button">+ הוספת כלי</button>`;
+
+/* events */
+$("#chips").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(!b)return;filter=b.dataset.f;try{localStorage.setItem("desk.filter",filter)}catch(e){}render()});
+$("#inbox").addEventListener("click",e=>{const b=e.target.closest("[data-f]");if(b){filter="notes";render()}});
+$("#search").addEventListener("input",e=>{query=e.target.value;render()});
+
+$("#board").addEventListener("click",async e=>{
+  const ask=e.target.closest("[data-ask]");
+  if(ask){
+    const n=notes.find(x=>x.id===ask.dataset.ask);const t=n&&tools.find(x=>x.id===n.toolId);
+    if(!n)return;
+    const text=`בשולחן הכלים יש הערה על ${t?t.name:"כלי"} (מזהה הערה: ${n.id}):\n"${n.text}"\nתטפל בה בבקשה, ואחר כך סמן אותה כטופלה בלוח.`;
+    try{await navigator.clipboard.writeText(text);toast("הבקשה הועתקה. הדבק אותה בשיחה עם Claude")}
+    catch(err){const card=ask.closest(".tool");let box=card.querySelector(".copybox");if(!box){box=document.createElement("div");box.className="composer copybox";box.innerHTML='<p class="hint">העתק והדבק בשיחה עם Claude:</p><textarea readonly></textarea>';card.appendChild(box)}const ta=box.querySelector("textarea");ta.value=text;ta.focus();ta.select()}
+    return;
+  }
+  const gb=e.target.closest("[data-group]");
+  if(gb){copyGroup(gb.dataset.group,gb);return}
+  const add=e.target.closest("[data-add]");
+  if(add){return addTool(add.dataset.add)}
+  const del=e.target.closest("[data-del-note]");
+  if(del){await write(()=>db.doc("notes/"+del.dataset.delNote).delete(),"ההערה נמחקה");return}
+  const b=e.target.closest("[data-act]");if(!b)return;
+  const card=b.closest(".tool"),id=card?.dataset.id,t=tools.find(x=>x.id===id);if(!t)return;
+  const act=b.dataset.act;
+  if(act==="copy"){copyMsg(t,b);return}
+  if(act==="compose"||act==="edit"||act==="notes"){const s=open[act];s.has(id)?s.delete(id):s.add(id);render();if(act==="compose"&&s.has(id))$("#c-"+CSS.escape(id))?.focus();return}
+  if(act==="save-note"){
+    const text=$("#c-"+CSS.escape(id)).value.trim();if(!text)return;
+    const ok=await write(()=>db.collection("notes").add({toolId:id,text,createdAt:Date.now(),done:false}),"ההערה נשמרה");
+    if(ok){open.compose.delete(id);open.notes.add(id);render()}return}
+  if(act==="save-edit"){
+    const g=k=>$(`#e-${k}-${CSS.escape(id)}`);
+    const cats=CATS.filter(c=>$(`#e-cat-${CSS.escape(id)}-${c.id}`).checked).map(c=>c.id);
+    const url=g("url").value.trim();
+    const data={name:g("name").value.trim()||t.name,url,desc:g("desc").value.trim(),shareMsg:g("msg").value.trim(),status:g("st").value,cats:cats.length?cats:["general"],guess:url===t.url?!!t.guess:false};
+    const ok=await write(()=>db.doc("tools/"+id).update(data),"נשמר");
+    if(ok){open.edit.delete(id);render()}return}
+  if(act==="delete"){
+    if(b.dataset.sure!=="1"){b.dataset.sure="1";b.textContent="ללחוץ שוב למחיקה סופית";return}
+    await write(()=>db.doc("tools/"+id).delete(),"הכלי נמחק");open.edit.delete(id);
+  }
+});
+$("#board").addEventListener("change",async e=>{
+  const id=e.target.dataset?.note;if(!id)return;
+  await write(()=>db.doc("notes/"+id).update({done:e.target.checked}),e.target.checked?"סומן כטופל":"חזר לרשימה");
+});
+
+async function addTool(cat){
+  const id="t"+Date.now().toString(36);
+  const ok=await write(()=>db.doc("tools/"+id).set({name:"כלי חדש",url:"",desc:"",status:"dev",cats:[cat],order:99}),"נוסף כלי");
+  if(ok){open.edit.add(id)}
+}
+
+async function write(fn,msg){
+  if(!db){toast("השמירה לא זמינה בתצוגה הזו");return false}
+  try{await fn();if(msg)toast(msg);return true}
+  catch(err){
+    if(err?.code==="invalid_argument"){canWrite=false;render();toast("אין לך הרשאת עריכה בדף הזה")}
+    else if(err?.code==="quota_exceeded")toast("הגעת למגבלת האחסון. מחק הערות שטופלו כדי לפנות מקום");
+    else toast("השמירה לא הצליחה, נסה שוב");
+    return false}
+}
+
+$("#tplText").value=DEFAULT_TPL;
+$("#tplSave").addEventListener("click",()=>{const v=$("#tplText").value.trim();if(!v)return;write(()=>db.doc("settings/share").set({template:v}),"הנוסח נשמר")});
+$("#tplReset").addEventListener("click",()=>{$("#tplText").value=DEFAULT_TPL;write(()=>db.doc("settings/share").set({template:DEFAULT_TPL}),"חזרנו לנוסח המקורי")});
+
+/* data */
+(async()=>{
+  db=await window.claude?.use?.("db")??null;
+  const user=await window.claude?.use?.("user")??null;
+  if(user){try{const c=await user.can("data.write");if(c===false)canWrite=false}catch(e){}}
+  if(!db){$("#board").innerHTML=`<div class="empty">לא ניתן לטעון את הרשימה.</div>`;return}
+  db.collection("tools").onSnapshot(s=>{tools=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+  db.collection("notes").onSnapshot(s=>{notes=s.docs.map(d=>({id:d.id,...d.data()}));render()},()=>{});
+  db.doc("settings/share").onSnapshot(s=>{const t=s.exists&&s.data().template;shareTpl=typeof t==="string"&&t.trim()?t:DEFAULT_TPL;const ta=$("#tplText");if(document.activeElement!==ta)ta.value=shareTpl;render()},()=>{});
+})();
+</script>
+
+</body></html>
