@@ -2,6 +2,7 @@
 
 <title>שולחן הכלים של בועז</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<script>document.documentElement.setAttribute("dir","rtl");document.documentElement.setAttribute("lang","he");</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@700&family=Rubik:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap">
@@ -24,6 +25,9 @@
   --accent:#5cc4b4; --accent-soft:#1d3532; --note:#f0a060; --note-soft:#3a2a1c;
   --led-live:#3fd18a; --led-dev:#f2b632; --led-idea:#6c7975; --wa:#4ad08a; color-scheme:dark}
 *{box-sizing:border-box}
+html,body{direction:rtl}
+.t-url,.edit input[type=url],.mono{direction:ltr;unicode-bidi:isolate}
+.t-url{text-align:right}
 body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.5;
   padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 56px}
 .wrap{max-width:980px;margin:0 auto;display:grid;gap:22px}
