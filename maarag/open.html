@@ -36,6 +36,7 @@ p{margin:0 0 10px;font-size:1.05rem}
 .cta{display:inline-block;margin-top:14px;padding:14px 22px;background:var(--teal);color:#fff;border-radius:6px;font-weight:700;font-size:1.05rem;text-decoration:none}
 .cta.ghost{background:#fff;color:var(--teal);border:2px solid var(--teal)}
 .muted{color:var(--muted);font-size:.9rem}
+.in{height:46px;border:2px solid var(--line2);border-radius:6px;padding:0 12px;font-size:1rem;font-family:var(--f-body);width:100%}
 .q{margin-top:22px}
 .q details{border-top:1px solid var(--line2);padding:10px 0}
 .q summary{cursor:pointer;font-weight:700}
@@ -84,6 +85,25 @@ footer a{color:var(--teal)}
     </div>
   </div>
 
+
+  <div class="price" style="border-color:var(--green);margin-top:18px;text-align:right">
+    <h2 style="margin-top:0;color:var(--green)">הזמנת מעגל מלא עם הנחיה אצלנו במרכז</h2>
+    <p>מפגש של כשעתיים, עד 10 משתתפים, בהנחיית בועז ויפעת – במרכז שלנו או אצלכם. ממלאים, ושולחים בוואטסאפ או במייל; נחזור אליכם לתיאום.</p>
+    <div style="display:grid;gap:8px;max-width:460px">
+      <input id="bkName" placeholder="השם שלכם" class="in">
+      <input id="bkPhone" placeholder="טלפון לחזרה" class="in" inputmode="tel">
+      <select id="bkType" class="in" style="background:#fff"><option value="משפחתי">מעגל משפחתי</option><option value="קבוצתי">מעגל קבוצתי (חברים / צוות)</option></select>
+      <input id="bkWho" placeholder="למי המעגל, וכמה משתתפים בערך?" class="in">
+      <input id="bkWhen" placeholder="מתי מתאים לכם? (ימים / שעות)" class="in">
+      <input id="bkWhere" placeholder="אצלנו במרכז או אצלכם?" class="in">
+    </div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+      <a class="cta" id="bkWa" href="#" style="background:var(--green)">שליחה בוואטסאפ ←</a>
+      <a class="cta ghost" id="bkMail" href="#" style="border-color:var(--green);color:var(--green)">שליחה במייל לבועז וליפעת</a>
+    </div>
+    <p class="muted" style="margin-top:10px">המייל נפתח באפליקציית הדואר שלכם עם כל הפרטים מוכנים – רק ללחוץ "שלח".</p>
+  </div>
+
   <div class="q">
     <h2>שאלות שחוזרות</h2>
     <details><summary>צריך לדעת נומרולוגיה כדי להנחות?</summary><p>לא. הכלי מקריא, מסביר ושואל. אתם רק פותחים שלב אחרי שלב ונותנים לאנשים לדבר. בלוח השלבים יש לכל שלב "שאלה למעגל" – זה כל מה שצריך.</p></details>
@@ -107,6 +127,15 @@ function build(){
 }
 ["rqName","rqType","rqWho"].forEach(id=>document.getElementById(id).addEventListener("input",build));document.querySelectorAll('input[name="rqWho2"]').forEach(r=>r.addEventListener("change",build));build();
 btn.addEventListener("click",build);
+const MAIL="boazbareket@gmail.com",CC="yifa.bareket1@gmail.com";
+function bk(){
+  const v=id=>document.getElementById(id).value.trim()||"—";
+  const body=`הזמנת מעגל מלא עם הנחיה\nשם: ${v("bkName")}\nטלפון: ${v("bkPhone")}\nסוג המעגל: ${document.getElementById("bkType").value}\nלמי וכמה משתתפים: ${v("bkWho")}\nמתי מתאים: ${v("bkWhen")}\nאיפה: ${v("bkWhere")}`;
+  document.getElementById("bkWa").href=`https://wa.me/${WA}?text=${encodeURIComponent("שלום בועז ויפעת, "+body)}`;
+  document.getElementById("bkMail").href=`mailto:${MAIL}?cc=${CC}&subject=${encodeURIComponent("הזמנת מעגל מלא עם הנחיה – "+v("bkName"))}&body=${encodeURIComponent(body)}`;
+}
+["bkName","bkPhone","bkType","bkWho","bkWhen","bkWhere"].forEach(id=>document.getElementById(id).addEventListener("input",bk));bk();
+document.getElementById("bkWa").addEventListener("click",bk);document.getElementById("bkMail").addEventListener("click",bk);
 </script>
 </body>
 </html>
