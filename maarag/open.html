@@ -93,11 +93,14 @@ footer a{color:var(--teal)}
       <input id="bkWhen" placeholder="מתי מתאים לכם? (ימים / שעות)" class="in">
       <input id="bkWhere" placeholder="אצלנו במרכז או אצלכם?" class="in">
     </div>
-    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:12px">
+    <p class="muted" id="bkErr" style="color:#a4513d;min-height:1.3em;margin:8px 0 0"></p>
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
       <a class="cta" id="bkWa" href="#" style="background:var(--green)">שליחה בוואטסאפ ←</a>
-      <a class="cta ghost" id="bkMail" href="#" style="border-color:var(--green);color:var(--green)">שליחה במייל לבועז וליפעת</a>
+      <a class="cta ghost" id="bkMail" href="#" target="_blank" rel="noopener" style="border-color:var(--green);color:var(--green)">שליחה במייל לבועז וליפעת</a>
+      <button type="button" class="cta ghost" id="bkCopy" style="border-color:var(--green);color:var(--green);font-family:var(--f-body);cursor:pointer">העתקת ההודעה</button>
     </div>
-    <p class="muted" style="margin-top:10px">המייל נפתח באפליקציית הדואר שלכם עם כל הפרטים מוכנים – רק ללחוץ "שלח".</p>
+    <details style="margin-top:10px"><summary class="muted" style="cursor:pointer">מה יישלח?</summary><pre id="bkPreview" style="white-space:pre-wrap;font-family:var(--f-body);font-size:.95rem;background:#f8f6f1;border:1px solid var(--line2);border-radius:6px;padding:10px;margin:8px 0 0"></pre></details>
+    <p class="muted" style="margin-top:10px">המייל נפתח ב‑Gmail (במחשב) או באפליקציית הדואר (בטלפון) עם כל הפרטים מוכנים – רק ללחוץ "שלח". אם שום דבר לא נפתח – "העתקת ההודעה" ושליחה מכל מקום.</p>
   </div>
 
   <div class="q">
@@ -120,17 +123,29 @@ function build(){
   const msg=`שלום בועז, הייתי במעגל מארג ואשמח לקבל קוד לפתיחת מעגל ${t}.\nשם: ${n}\nלמי המעגל וכמה משתתפים: ${w}`;
   btn.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
 }
-["rqName","rqType","rqWho"].forEach(id=>document.getElementById(id).addEventListener("input",build));build();
+["rqName","rqType","rqWho"].forEach(id=>{const el=document.getElementById(id);el.addEventListener("input",build);el.addEventListener("change",build);});build();
 btn.addEventListener("click",build);
 const MAIL="boazbareket@gmail.com",CC="yifa.bareket1@gmail.com";
-function bk(){
+const isPhone=/Android|iPhone|iPad/i.test(navigator.userAgent);
+function bkBody(){
   const v=id=>document.getElementById(id).value.trim()||"—";
-  const body=`הזמנת מעגל מלא עם הנחיה\nשם: ${v("bkName")}\nטלפון: ${v("bkPhone")}\nסוג המעגל: ${document.getElementById("bkType").value}\nלמי וכמה משתתפים: ${v("bkWho")}\nמתי מתאים: ${v("bkWhen")}\nאיפה: ${v("bkWhere")}`;
-  document.getElementById("bkWa").href=`https://wa.me/${WA}?text=${encodeURIComponent("שלום בועז ויפעת, "+body)}`;
-  document.getElementById("bkMail").href=`mailto:${MAIL}?cc=${CC}&subject=${encodeURIComponent("הזמנת מעגל מלא עם הנחיה – "+v("bkName"))}&body=${encodeURIComponent(body)}`;
+  return `שלום בועז ויפעת,\nאשמח להזמין מעגל מלא עם הנחיה אצלכם במרכז.\n\nשם: ${v("bkName")}\nטלפון: ${v("bkPhone")}\nסוג המעגל: ${document.getElementById("bkType").value}\nלמי וכמה משתתפים: ${v("bkWho")}\nמתי מתאים לנו: ${v("bkWhen")}\nאיפה: ${v("bkWhere")}\n\nתודה!`;
 }
-["bkName","bkPhone","bkType","bkWho","bkWhen","bkWhere"].forEach(id=>document.getElementById(id).addEventListener("input",bk));bk();
-document.getElementById("bkWa").addEventListener("click",bk);document.getElementById("bkMail").addEventListener("click",bk);
+function bk(){
+  const body=bkBody(),name=document.getElementById("bkName").value.trim();
+  document.getElementById("bkPreview").textContent=body;
+  document.getElementById("bkWa").href=`https://wa.me/${WA}?text=${encodeURIComponent(body)}`;
+  const su=encodeURIComponent("הזמנת מעגל מלא עם הנחיה – "+(name||"")),bo=encodeURIComponent(body);
+  document.getElementById("bkMail").href=isPhone?`mailto:${MAIL}?cc=${CC}&subject=${su}&body=${bo}`:`https://mail.google.com/mail/?view=cm&fs=1&to=${MAIL}&cc=${CC}&su=${su}&body=${bo}`;
+}
+function bkOk(e){
+  const n=document.getElementById("bkName").value.trim(),ph=document.getElementById("bkPhone").value.trim(),err=document.getElementById("bkErr");
+  if(!n||!ph){err.textContent="כדי שנוכל לחזור אליכם – חסר "+(!n?"שם":"טלפון")+".";if(e)e.preventDefault();return false;}
+  err.textContent="";bk();return true;
+}
+["bkName","bkPhone","bkType","bkWho","bkWhen","bkWhere"].forEach(id=>{const el=document.getElementById(id);el.addEventListener("input",bk);el.addEventListener("change",bk);});bk();
+document.getElementById("bkWa").addEventListener("click",bkOk);document.getElementById("bkMail").addEventListener("click",bkOk);
+document.getElementById("bkCopy").addEventListener("click",async()=>{if(!bkOk())return;try{await navigator.clipboard.writeText(bkBody());document.getElementById("bkErr").style.color="var(--teal)";document.getElementById("bkErr").textContent="ההודעה הועתקה – אפשר להדביק בוואטסאפ או במייל.";}catch(e){prompt("העתיקו:",bkBody());}});
 </script>
 </body>
 </html>
