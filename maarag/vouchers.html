@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>שוברים · המארג</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&family=Secular+One&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#f8f6f1;--ink:#1f2d3a;--muted:#5b6670;--line2:#d3cfc5;--teal:#0f6b66;--purple:#8c7bb0;--f-mono:"IBM Plex Mono",Heebo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,Arial,sans-serif;line-height:1.5}
+.wrap{max-width:640px;margin:0 auto;padding:28px 16px 60px}
+h1{font-family:"Secular One",Heebo,sans-serif;font-weight:400;font-size:2rem;margin:0;border-bottom:3px solid var(--ink);padding-bottom:10px}
+.card{background:#fff;border:1.5px solid var(--line2);border-radius:8px;padding:16px;margin-top:16px}
+label{display:block;font-weight:700;margin-bottom:6px}
+input{height:46px;width:100%;border:2px solid var(--ink);border-radius:6px;padding:0 12px;font-size:1rem;font-family:Heebo}
+button{height:46px;padding:0 18px;border:0;border-radius:6px;background:var(--teal);color:#fff;font-weight:700;font-size:1rem;font-family:Heebo;cursor:pointer}
+button.ghost{background:#fff;color:var(--teal);border:2px solid var(--teal)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.code{font-family:var(--f-mono);font-size:1.6rem;letter-spacing:.12em;direction:ltr;display:inline-block;padding:8px 14px;border:2px dashed var(--purple);border-radius:6px;background:#fff}
+table{width:100%;border-collapse:collapse;font-size:.92rem;margin-top:10px}
+th,td{padding:8px 6px;border-bottom:1px solid var(--line2);text-align:right;vertical-align:top}
+td.c{font-family:var(--f-mono);direction:ltr;text-align:right}
+.used{color:var(--muted)}
+.ok{color:var(--teal);font-weight:700}
+.muted{color:var(--muted);font-size:.9rem}
+.err{color:#a4513d;min-height:1.3em}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>שוברים למעגל אחד</h1>
+  <p class="muted">דף מנחה. כל שובר פותח מעגל אחד (משפחתי או קבוצתי, לבחירת הקונה) ומסומן כמומש ברגע שהמעגל נפתח.</p>
+
+  <div class="card" id="gate">
+    <label for="hc">קוד מנחה</label>
+    <div class="row"><input id="hc" type="password" autocomplete="off" style="max-width:260px"><button id="hcBtn">כניסה</button></div>
+    <p class="err" id="hcErr"></p>
+  </div>
+
+  <div id="panel" hidden>
+    <div class="card">
+      <label for="note">למי השובר (לא חובה – רק לזיכרון שלך)</label>
+      <input id="note" placeholder="למשל: אורית, מעגל לחברות, שולם בביט 1.11">
+      <div class="row"><button id="mk">צור שובר חדש</button><span class="muted">450 ₪ · מעגל אחד</span></div>
+      <div id="out" class="row" hidden><span class="code" id="codeOut"></span><button class="ghost" id="copyBtn">העתקה</button><a class="ghost" id="waLink" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;height:46px;padding:0 18px;border:2px solid var(--teal);border-radius:6px;color:var(--teal);font-weight:700;text-decoration:none">שליחה בוואטסאפ</a></div>
+      <p class="err" id="mkErr"></p>
+    </div>
+    <div class="card">
+      <div class="row" style="justify-content:space-between;margin-top:0"><b>כל השוברים</b><button class="ghost" id="refresh">רענון</button></div>
+      <table><thead><tr><th>שובר</th><th>למי</th><th>נוצר</th><th>מצב</th></tr></thead><tbody id="rows"></tbody></table>
+    </div>
+  </div>
+</div>
+<script>
+const DB="https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app";
+const HOST_HASH="c1f916534a33c70e6695a100531090ec79483c0900cf33ac087d01acb145bfc9";
+const $=id=>document.getElementById(id);
+async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
+const req=async(m,p,b)=>{const r=await fetch(`${DB}/${p}.json`,{method:m,headers:{"Content-Type":"application/json"},body:b===undefined?undefined:JSON.stringify(b)});if(!r.ok)throw new Error(r.status);return r.json();};
+const OK="menifa-vouchers-ok";
+async function unlock(){
+  const c=$("hc").value.trim();
+  try{if(await sha256(c)===HOST_HASH){localStorage.setItem(OK,HOST_HASH);show();return;}}catch(e){}
+  $("hcErr").textContent="הקוד לא נכון.";
+}
+function show(){$("gate").hidden=true;$("panel").hidden=false;list();}
+$("hcBtn").onclick=unlock;$("hc").onkeydown=e=>{if(e.key==="Enter")unlock();};
+if(localStorage.getItem(OK)===HOST_HASH)show();
+const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789";
+const gen=()=>"MNF"+Array.from({length:6},()=>A[Math.floor(Math.random()*A.length)]).join("");
+const fmt=c=>c.replace(/^MNF/,"MNF-").replace(/^(MNF-\w{3})(\w{3})$/,"$1-$2");
+$("mk").onclick=async()=>{
+  $("mk").disabled=true;$("mkErr").textContent="";
+  try{
+    let code;for(let i=0;i<5;i++){code=gen();if(!(await req("GET",`vouchers/${code}`)))break;}
+    await req("PUT",`vouchers/${code}`,{used:false,created:Date.now(),note:$("note").value.trim().slice(0,80)});
+    $("codeOut").textContent=fmt(code);$("out").hidden=false;
+    const msg=`שלום! הנה השובר שלך למעגל מארג אחד: ${fmt(code)}\nפותחים מעגל משפחתי: https://boazbareket1.github.io/family-weave/new/\nאו קבוצתי: https://boazbareket1.github.io/group-weave/new/\nבדף הפתיחה מקלידים את השובר בשדה "קוד מנחה או שובר". בהצלחה!`;
+    $("waLink").href="https://wa.me/?text="+encodeURIComponent(msg);
+    $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(fmt(code));$("copyBtn").textContent="הועתק ✓";}catch(e){prompt("העתיקו:",fmt(code));}};
+    $("note").value="";list();
+  }catch(e){$("mkErr").textContent="לא הצלחנו ליצור שובר. בדקו חיבור.";}
+  $("mk").disabled=false;
+};
+async function list(){
+  const rows=$("rows");rows.innerHTML="<tr><td colspan=4 class=muted>טוען…</td></tr>";
+  try{const all=await req("GET","vouchers")||{};
+    const arr=Object.entries(all).sort((a,b)=>(b[1].created||0)-(a[1].created||0));
+    rows.innerHTML=arr.length?arr.map(([c,v])=>`<tr class="${v.used?"used":""}"><td class="c">${fmt(c)}</td><td>${(v.note||"").replace(/</g,"&lt;")}</td><td>${v.created?new Date(v.created).toLocaleDateString("he-IL"):""}</td><td>${v.used?`מומש · ${v.tool==="family"?"משפחתי":"קבוצתי"} <span class="c">${v.room||""}</span>`:'<span class="ok">פתוח</span>'}</td></tr>`).join(""):"<tr><td colspan=4 class=muted>עדיין אין שוברים.</td></tr>";
+  }catch(e){rows.innerHTML="<tr><td colspan=4 class=err>לא הצלחנו לטעון.</td></tr>";}
+}
+$("refresh").onclick=list;
+</script>
+</body>
+</html>
