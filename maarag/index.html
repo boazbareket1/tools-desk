@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>המארג · אישי, משפחתי, קבוצתי</title>
+<meta name="description" content="המארג: מפת מספרים אישית, מארג משפחתי ומארג קבוצתי – בוחרים את המעגל ונכנסים.">
+<meta property="og:title" content="המארג">
+<meta property="og:description" content="מפת מספרים אישית · המארג המשפחתי · המארג הקבוצתי">
+<meta property="og:url" content="https://boazbareket1.github.io/tools-desk/maarag/">
+<meta property="og:image" content="https://boazbareket1.github.io/group-weave/new/og.jpg?v=4">
+<meta property="og:image:width" content="800">
+<meta property="og:image:height" content="800">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;700&family=Secular+One&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#f8f6f1;--ink:#1f2d3a;--muted:#5b6670;--line2:#d3cfc5;--teal:#0f6b66;--green:#4f8a5b;--blue:#4a86a3;--purple:#8c7bb0;
+  --f-body:"Heebo","Arial Hebrew",Arial,sans-serif;--f-display:"Secular One","Heebo",sans-serif;--f-mono:"IBM Plex Mono",Heebo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--f-body);line-height:1.5}
+.wrap{max-width:720px;margin:0 auto;padding:28px 16px 60px}
+header{border-bottom:3px solid var(--ink);padding-bottom:12px;margin-bottom:22px}
+.eyebrow{font-family:var(--f-mono);font-size:.95rem;color:var(--muted);margin:0 0 4px}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(2.2rem,8vw,3.2rem);margin:0;line-height:1.05}
+p.lead{margin:10px 0 0;font-size:1.05rem;color:#333;max-width:48ch}
+.gates{display:grid;gap:14px;margin-top:22px}
+@media(min-width:640px){.gates{grid-template-columns:repeat(3,1fr)}}
+a.gate{display:flex;flex-direction:column;gap:6px;padding:18px 16px 16px;border:2px solid var(--acc);border-top-width:8px;border-radius:8px;background:var(--tint);color:var(--ink);text-decoration:none;min-height:190px;transition:transform .12s}
+a.gate:hover{transform:translateY(-2px)}
+.gate .k{font-family:var(--f-mono);font-size:.85rem;color:var(--acc);margin:0}
+.gate h2{font-family:var(--f-display);font-weight:400;font-size:1.6rem;margin:0;color:var(--acc)}
+.gate p{margin:0;font-size:.95rem;color:#333;flex:1}
+.gate .cta{display:inline-block;margin-top:8px;padding:9px 14px;background:var(--acc);color:#fff;border-radius:6px;font-weight:700;font-size:.95rem;align-self:flex-start}
+.me{--acc:var(--teal);--tint:#f5f2f8}
+.fam{--acc:var(--green);--tint:#f1f6ef}
+.grp{--acc:var(--blue);--tint:#f8f6f1}
+.code{margin-top:26px;padding:18px 16px;border:2px solid var(--purple);border-top-width:6px;border-radius:8px;background:#fff}
+.code h2{font-size:1.2rem;margin:0 0 4px}
+.code p{margin:0 0 10px;color:var(--muted);font-size:.95rem}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+input{height:48px;flex:1;min-width:150px;max-width:220px;border:2px solid var(--purple);border-radius:6px;padding:0 12px;font-size:1.05rem;font-family:var(--f-mono);direction:ltr;text-transform:uppercase;letter-spacing:.15em}
+button{height:48px;padding:0 18px;border:0;border-radius:6px;background:var(--purple);color:#fff;font-weight:700;font-size:1rem;font-family:var(--f-body);cursor:pointer}
+.err{color:#a4513d;font-size:.9rem;min-height:1.3em;margin:8px 0 0}
+footer{margin-top:30px;font-size:.85rem;color:var(--muted)}
+footer a{color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <p class="eyebrow">אישי · משפחתי · קבוצתי</p>
+    <h1>המארג</h1>
+    <p class="lead">מפת מספרים לכל אחד, והחוטים שנארגים בין אנשים. בוחרים את המעגל שמתאים למי שנמצא בחדר – וכל מעגל נשאר בצבע שלו לכל אורך הדרך.</p>
+  </header>
+
+  <div class="gates">
+    <a class="gate me" href="https://boazbareket1.github.io/numerology-map/">
+      <p class="k">01 · לבד</p><h2>מפת המספרים</h2>
+      <p>המפה האישית המלאה: שביל החיים, ביטוי, נשמה ואישיות – ומה שנפגש ביניהם.</p>
+      <span class="cta">למפה שלי ←</span>
+    </a>
+    <a class="gate fam" href="https://boazbareket1.github.io/family-weave/new/">
+      <p class="k">02 · משפחה</p><h2>המארג המשפחתי</h2>
+      <p>בני משפחה אחת: תפקידים, חיכוך וצמיחה, השנה המשפחתית, והחוטים שמחברים.</p>
+      <span class="cta">לפתוח מעגל משפחתי ←</span>
+    </a>
+    <a class="gate grp" href="https://boazbareket1.github.io/group-weave/new/">
+      <p class="k">03 · קבוצה</p><h2>המארג הקבוצתי</h2>
+      <p>עד 10 משתתפים שרק נפגשו: מי אני, מה אני מביא/ה, ומה הקבוצה מביאה לי.</p>
+      <span class="cta">לפתוח מעגל קבוצתי ←</span>
+    </a>
+  </div>
+
+  <div class="code">
+    <h2>קיבלתם קוד מעגל?</h2>
+    <p>הקלידו אותו כאן – נזהה אם זה מעגל משפחתי או קבוצתי ונכניס אתכם.</p>
+    <div class="row"><input id="codeIn" placeholder="קוד המעגל" autocomplete="off" maxlength="8"><button id="codeBtn">כניסה</button></div>
+    <p class="err" id="err"></p>
+  </div>
+
+  <footer>החישוב מבוסס על גימטריה עברית בשיטת המספר הקטן ועל תאריך הלידה. כלי להתבוננות ולשיחה, לא אבחון. · <a href="https://boazbareket1.github.io/tools-desk/">שולחן הכלים</a></footer>
+</div>
+<script>
+const DB="https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app";
+const DEST={family:"https://boazbareket1.github.io/family-weave/new/",group:"https://boazbareket1.github.io/group-weave/new/"};
+const inp=document.getElementById("codeIn"),btn=document.getElementById("codeBtn"),err=document.getElementById("err");
+async function enter(){
+  const code=inp.value.trim().toUpperCase();if(!code){err.textContent="חסר קוד.";return;}
+  btn.disabled=true;err.textContent="בודקים…";
+  try{
+    const r=await fetch(`${DB}/rooms/${encodeURIComponent(code)}/meta.json`);const m=await r.json();
+    if(!m){err.textContent="לא מצאנו מעגל עם הקוד הזה.";btn.disabled=false;return;}
+    const t=m.type==="family"?"family":"group";
+    location.href=DEST[t]+"?r="+encodeURIComponent(code);
+  }catch(e){err.textContent="לא הצלחנו להתחבר. בדקו את החיבור ונסו שוב.";btn.disabled=false;}
+}
+btn.onclick=enter;inp.addEventListener("keydown",e=>{if(e.key==="Enter")enter();});
+const q=new URLSearchParams(location.search).get("r");if(q){inp.value=q;enter();}
+</script>
+</body>
+</html>
