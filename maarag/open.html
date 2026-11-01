@@ -52,7 +52,7 @@ footer a{color:var(--teal)}
 
   <h2>איך זה עובד</h2>
   <ul class="steps">
-    <li><b class="n">1</b><div><b>מבקשים שובר למעגל אחד.</b> כותבים לבועז בוואטסאפ, מקבלים קוד שובר – בתקופת ההשקה בלי עלות.</div></li>
+    <li><b class="n">1</b><div><b>לוקחים את קוד ההשקה.</b> בתקופת ההשקה הקוד פתוח לכולם: <span style="font-family:var(--f-mono);font-size:1.15rem;color:var(--teal);letter-spacing:.15em;direction:ltr;display:inline-block">8888</span>. בלי לחכות, בלי עלות.</div></li>
     <li><b class="n">2</b><div><b>בוחרים את סוג המעגל.</b> משפחתי – אם כולם מאותה משפחה. קבוצתי – חברים, צוות, או כל מי שרוצים לחבר.</div></li>
     <li><b class="n">3</b><div><b>פותחים את המעגל עם השובר</b> ונותנים לו שם. מרגע זה אתם המנחים: ה‑QR, לוח השלבים והמעגל – בידיים שלכם.</div></li>
     <li><b class="n">4</b><div><b>מזמינים.</b> שולחים קישור או מראים QR. כל משתתף מצטרף מהטלפון – בלי הרשמה, בלי תשלום, רק שם ותאריך לידה.</div></li>
@@ -67,9 +67,20 @@ footer a{color:var(--teal)}
 
   <div class="price">
     <div class="big">חינם</div>
-    <small>בתקופת ההשקה · שובר למעגל אחד · ללא הגבלת זמן · כל המשתתפים מצטרפים חינם</small>
-    <a class="cta" href="https://wa.me/?text=%D7%94%D7%99%D7%99%D7%AA%D7%99%20%D7%91%D7%9E%D7%A2%D7%92%D7%9C%20%D7%9E%D7%90%D7%A8%D7%92%20%D7%95%D7%90%D7%A0%D7%99%20%D7%A8%D7%95%D7%A6%D7%94%20%D7%9C%D7%A4%D7%AA%D7%95%D7%97%20%D7%9E%D7%A2%D7%92%D7%9C%20%D7%9E%D7%A9%D7%9C%D7%99%20%E2%80%93%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A9%D7%95%D7%91%D7%A8" id="waBtn">לבקש שובר בוואטסאפ ←</a>
-    <p class="muted" style="margin-top:12px">כבר יש לכם שובר? פתחו מעגל <a href="https://boazbareket1.github.io/family-weave/new/">משפחתי</a> או <a href="https://boazbareket1.github.io/group-weave/new/">קבוצתי</a> והקלידו אותו בשדה "קוד מנחה או שובר".</p>
+    <small>בתקופת ההשקה · מעגל אחד לכל פתיחה · כל המשתתפים מצטרפים חינם</small>
+    <p style="margin-top:14px">קוד ההשקה לפתיחת מעגל:</p>
+    <div style="font-family:var(--f-mono);font-size:2.2rem;letter-spacing:.3em;direction:ltr;color:var(--teal);font-weight:600">8888</div>
+    <p class="muted">מקלידים אותו בשדה "קוד מנחה או שובר" בדף הפתיחה של <a href="https://boazbareket1.github.io/family-weave/new/">המעגל המשפחתי</a> או <a href="https://boazbareket1.github.io/group-weave/new/">הקבוצתי</a>.</p>
+    <div style="margin-top:18px;padding-top:14px;border-top:1px solid var(--line2);text-align:right">
+      <p style="font-weight:700;margin-bottom:6px">נשמח לדעת שפתחתם מעגל</p>
+      <p class="muted" style="margin-bottom:10px">ספרו לנו למי המעגל – ואם תרצו, נעזור בהנחיה או נשלח טיפים למפגש.</p>
+      <div style="display:grid;gap:8px;max-width:420px">
+        <input id="rqName" placeholder="השם שלכם" style="height:46px;border:2px solid var(--line2);border-radius:6px;padding:0 12px;font-size:1rem;font-family:var(--f-body)">
+        <select id="rqType" style="height:46px;border:2px solid var(--line2);border-radius:6px;padding:0 12px;font-size:1rem;font-family:var(--f-body);background:#fff"><option value="משפחתי">מעגל משפחתי</option><option value="קבוצתי">מעגל קבוצתי (חברים / צוות)</option></select>
+        <input id="rqWho" placeholder="למי המעגל? (למשל: המשפחה שלי, חברות מהעבודה)" style="height:46px;border:2px solid var(--line2);border-radius:6px;padding:0 12px;font-size:1rem;font-family:var(--f-body)">
+      </div>
+      <a class="cta" id="waBtn" href="#" style="margin-top:12px">לשלוח לבועז בוואטסאפ ←</a>
+    </div>
   </div>
 
   <div class="q">
@@ -83,5 +94,16 @@ footer a{color:var(--teal)}
 
   <footer><a href="./">לדף השער של המארג</a> · <a href="https://boazbareket1.github.io/tools-desk/">שולחן הכלים</a></footer>
 </div>
+<script>
+const WA="";/* your number in international format, e.g. 972501234567 */
+const btn=document.getElementById("waBtn");
+function build(){
+  const n=document.getElementById("rqName").value.trim()||"—",t=document.getElementById("rqType").value,w=document.getElementById("rqWho").value.trim()||"—";
+  const msg=`שלום בועז, הייתי במעגל מארג ואני פותח/ת מעגל ${t} משלי עם קוד ההשקה.\nשם: ${n}\nלמי המעגל: ${w}\nאשמח לטיפים להנחיה.`;
+  btn.href=`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`;
+}
+["rqName","rqType","rqWho"].forEach(id=>document.getElementById(id).addEventListener("input",build));build();
+btn.addEventListener("click",build);
+</script>
 </body>
 </html>
