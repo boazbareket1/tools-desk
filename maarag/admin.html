@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>פעילות המעגלים · המארג</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;700&family=Secular+One&family=IBM+Plex+Mono:wght@400;600&display=swap">
+<style>
+:root{--bg:#f8f6f1;--ink:#1f2d3a;--muted:#5b6670;--line2:#d3cfc5;--teal:#0f6b66;--green:#4f8a5b;--blue:#4a86a3;--purple:#8c7bb0;--f-mono:"IBM Plex Mono",Heebo,monospace}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:Heebo,Arial,sans-serif;line-height:1.5}
+.wrap{max-width:1100px;margin:0 auto;padding:24px 16px 60px}
+h1{font-family:"Secular One",Heebo,sans-serif;font-weight:400;font-size:2rem;margin:0;border-bottom:3px solid var(--ink);padding-bottom:10px}
+h2{font-size:1.15rem;margin:22px 0 8px}
+.card{background:#fff;border:1.5px solid var(--line2);border-radius:8px;padding:14px 16px}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-top:14px}
+.kpi{background:#fff;border:1.5px solid var(--line2);border-top:6px solid var(--acc,var(--ink));border-radius:8px;padding:12px 14px}
+.kpi b{display:block;font-family:"Secular One",Heebo,sans-serif;font-weight:400;font-size:2rem;line-height:1.1;color:var(--acc,var(--ink))}
+.kpi span{font-size:.9rem;color:var(--muted)}
+input,select{height:42px;border:2px solid var(--ink);border-radius:6px;padding:0 10px;font-size:1rem;font-family:Heebo;background:#fff}
+button{height:42px;padding:0 16px;border:0;border-radius:6px;background:var(--teal);color:#fff;font-weight:700;font-size:1rem;font-family:Heebo;cursor:pointer}
+button.ghost{background:#fff;color:var(--teal);border:2px solid var(--teal)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+table{width:100%;border-collapse:collapse;font-size:.9rem;margin-top:8px}
+th,td{padding:7px 6px;border-bottom:1px solid var(--line2);text-align:right;vertical-align:top;white-space:nowrap}
+th{cursor:pointer;user-select:none;color:var(--muted);font-weight:700}
+td.c{font-family:var(--f-mono);direction:ltr;text-align:right}
+.fam{color:var(--green);font-weight:700}.grp{color:var(--blue);font-weight:700}
+.bar{display:flex;align-items:flex-end;gap:4px;height:120px;margin-top:8px}
+.bar div{flex:1;background:var(--teal);border-radius:3px 3px 0 0;position:relative;min-width:6px}
+.bar div span{position:absolute;bottom:-20px;left:0;right:0;text-align:center;font-size:.7rem;color:var(--muted);font-family:var(--f-mono)}
+.bar div i{position:absolute;top:-18px;left:0;right:0;text-align:center;font-size:.75rem;font-style:normal;color:var(--ink)}
+.muted{color:var(--muted);font-size:.9rem}.err{color:#a4513d}
+.tbl{overflow-x:auto}
+a{color:var(--teal)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>פעילות המעגלים</h1>
+  <p class="muted"><a href="vouchers.html">← שוברים</a> · <a href="./">דף השער</a></p>
+  <p class="muted">תמונה של כל המעגלים שנפתחו במארג המשפחתי ובמארג הקבוצתי – מתי, כמה משתתפים, עד איזה שלב הגיעו, ומתי הייתה בהם פעילות אחרונה.</p>
+
+  <div class="card" id="gate" style="margin-top:14px">
+    <div class="row"><label for="hc"><b>קוד מנחה</b></label><input id="hc" type="password" autocomplete="off" style="max-width:240px"><button id="hcBtn">כניסה</button><span class="err" id="hcErr"></span></div>
+  </div>
+
+  <div id="panel" hidden>
+    <div class="kpis" id="kpis"></div>
+    <h2>מעגלים חדשים לפי שבוע</h2>
+    <div class="card"><div class="bar" id="chart"></div><p class="muted" style="margin:26px 0 0">תאריך = תחילת השבוע (יום ראשון).</p></div>
+    <h2>כל המעגלים</h2>
+    <div class="card">
+      <div class="row" style="margin-bottom:6px"><input id="q" placeholder="חיפוש לפי שם / קוד" style="max-width:240px"><select id="ftype"><option value="">כל הסוגים</option><option value="family">משפחתי</option><option value="group">קבוצתי</option></select><select id="fact"><option value="">כל הפעילות</option><option value="1">לפחות משתתף אחד</option><option value="2">לפחות שניים</option><option value="done">הגיעו לשלב 4+</option></select><button class="ghost" id="refresh">רענון</button><button class="ghost" id="csv">הורדת CSV</button></div>
+      <div class="tbl"><table><thead><tr>
+        <th data-k="name">שם</th><th data-k="code">קוד</th><th data-k="type">סוג</th><th data-k="created">נפתח</th><th data-k="n">משתתפים</th><th data-k="stage">שלב</th><th data-k="last">פעילות אחרונה</th><th data-k="notes">סיומים</th><th data-k="wall">לוח</th><th data-k="fb">משוב</th><th data-k="via">נפתח עם</th><th>פתיחה</th>
+      </tr></thead><tbody id="rows"></tbody></table></div>
+      <p class="muted" id="count"></p>
+    </div>
+  </div>
+</div>
+<script>
+const DB="https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app";
+const HOST_HASH="c1f916534a33c70e6695a100531090ec79483c0900cf33ac087d01acb145bfc9";
+const DEST={family:"https://boazbareket1.github.io/family-weave/new/",group:"https://boazbareket1.github.io/group-weave/new/"};
+const $=id=>document.getElementById(id);
+async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
+const OK="menifa-admin-ok";
+async function unlock(){try{if(await sha256($("hc").value.trim())===HOST_HASH){localStorage.setItem(OK,HOST_HASH);show();return;}}catch(e){}$("hcErr").textContent="הקוד לא נכון.";}
+function show(){$("gate").hidden=true;$("panel").hidden=false;load();}
+$("hcBtn").onclick=unlock;$("hc").onkeydown=e=>{if(e.key==="Enter")unlock();};
+if(localStorage.getItem(OK)===HOST_HASH)show();
+
+let ROWS=[],sortK="last",sortD=-1;
+const fmtD=t=>t?new Date(t).toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit",year:"2-digit"})+" "+new Date(t).toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"}):"";
+const ago=t=>{if(!t)return "";const d=(Date.now()-t)/864e5;return d<1?"היום":d<2?"אתמול":`לפני ${Math.floor(d)} ימים`;};
+const STAGE=["הצטרפות","מי אני","המספר שלנו","האתגר","תפקידים","חוטים","חיכוך/סגירה","השנה","סגירה"];
+async function load(){
+  $("rows").innerHTML='<tr><td colspan="12" class="muted">טוען…</td></tr>';
+  try{
+    const r=await fetch(`${DB}/rooms.json`);const all=await r.json()||{};
+    ROWS=Object.entries(all).map(([code,room])=>{
+      const m=room.meta||{},mem=Object.values(room.members||{}),notes=Object.values(room.notes||{}),wall=Object.values(room.wall||{}),fb=Object.values(room.fb||{});
+      const ts=[m.created||0,...mem.map(x=>x.t||0),...notes.map(x=>x.t||0),...wall.map(x=>x.t||0)];
+      return {code,name:m.name||"",type:m.type||"group",created:m.created||0,n:mem.length,stage:m.stage||0,closed:!!m.closed,last:Math.max(...ts),notes:notes.length,wall:wall.length,fb:fb.length,via:m.voucher?(m.voucher==="launch"?"קוד השקה":"שובר "+m.voucher):"מנחה",members:mem.map(x=>x.name).join(", ")};
+    });
+    render();
+  }catch(e){$("rows").innerHTML='<tr><td colspan="12" class="err">לא הצלחנו לטעון. בדקו חיבור.</td></tr>';}
+}
+function kpis(rows){
+  const fam=rows.filter(r=>r.type==="family").length,grp=rows.length-fam;
+  const people=rows.reduce((a,r)=>a+r.n,0),active=rows.filter(r=>r.n>=2).length,done=rows.filter(r=>r.stage>=4).length;
+  const wk=rows.filter(r=>Date.now()-r.last<7*864e5).length;
+  $("kpis").innerHTML=[["מעגלים",rows.length,"var(--ink)"],["משפחתיים",fam,"var(--green)"],["קבוצתיים",grp,"var(--blue)"],["משתתפים בסך הכול",people,"var(--teal)"],["מעגלים עם 2+ משתתפים",active,"var(--teal)"],["הגיעו לשלב 4+",done,"var(--purple)"],["פעילים בשבוע האחרון",wk,"var(--purple)"]].map(([l,v,c])=>`<div class="kpi" style="--acc:${c}"><b>${v}</b><span>${l}</span></div>`).join("");
+}
+function chart(rows){
+  const wk=t=>{const d=new Date(t);d.setHours(0,0,0,0);d.setDate(d.getDate()-d.getDay());return d.getTime();};
+  const by={};rows.forEach(r=>{if(!r.created)return;const k=wk(r.created);by[k]=(by[k]||0)+1;});
+  const keys=Object.keys(by).map(Number).sort((a,b)=>a-b).slice(-12);const max=Math.max(1,...keys.map(k=>by[k]));
+  $("chart").innerHTML=keys.map(k=>`<div style="height:${Math.round(by[k]/max*100)}%"><i>${by[k]}</i><span>${new Date(k).toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit"})}</span></div>`).join("")||'<p class="muted">עדיין אין נתונים.</p>';
+}
+function filtered(){
+  const q=$("q").value.trim().toLowerCase(),t=$("ftype").value,a=$("fact").value;
+  return ROWS.filter(r=>(!q||r.name.toLowerCase().includes(q)||r.code.toLowerCase().includes(q)||r.members.toLowerCase().includes(q))&&(!t||r.type===t)&&(a===""||(a==="done"?r.stage>=4:r.n>=+a)));
+}
+function render(){
+  kpis(ROWS);chart(ROWS);
+  const rows=filtered().sort((x,y)=>(x[sortK]>y[sortK]?1:x[sortK]<y[sortK]?-1:0)*sortD);
+  $("rows").innerHTML=rows.map(r=>`<tr><td title="${r.members.replace(/"/g,"&quot;")}">${r.name.replace(/</g,"&lt;")||'<span class="muted">(ללא שם)</span>'}</td><td class="c">${r.code}</td><td class="${r.type==="family"?"fam":"grp"}">${r.type==="family"?"משפחתי":"קבוצתי"}</td><td>${fmtD(r.created)}</td><td>${r.n}</td><td>${r.stage} · ${STAGE[r.stage]||""}${r.closed?' <span class="muted">(סגור)</span>':""}</td><td title="${fmtD(r.last)}">${ago(r.last)}</td><td>${r.notes}</td><td>${r.wall}</td><td>${r.fb}</td><td>${r.via}</td><td><a href="${DEST[r.type]||DEST.group}?r=${r.code}" target="_blank" rel="noopener">פתיחה ↗</a></td></tr>`).join("")||'<tr><td colspan="12" class="muted">אין מעגלים שמתאימים לסינון.</td></tr>';
+  $("count").textContent=`${rows.length} מתוך ${ROWS.length} מעגלים`;
+}
+document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortK===k)sortD=-sortD;else{sortK=k;sortD=k==="name"||k==="code"||k==="type"?1:-1;}render();});
+["q","ftype","fact"].forEach(id=>$(id).addEventListener("input",render));
+$("refresh").onclick=load;
+$("csv").onclick=()=>{const h=["שם","קוד","סוג","נפתח","משתתפים","שלב","פעילות אחרונה","סיומים","לוח","משוב","נפתח עם","משתתפים (שמות)"];
+  const lines=[h.join(",")].concat(filtered().map(r=>[r.name,r.code,r.type,fmtD(r.created),r.n,r.stage,fmtD(r.last),r.notes,r.wall,r.fb,r.via,r.members].map(v=>`"${String(v).replace(/"/g,'""')}"`).join(",")));
+  const a=document.createElement("a");a.href=URL.createObjectURL(new Blob(["﻿"+lines.join("\n")],{type:"text/csv;charset=utf-8"}));a.download="maarag-circles.csv";a.click();};
+</script>
+</body>
+</html>
