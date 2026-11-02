@@ -54,9 +54,15 @@ a{color:var(--teal)}
     <div class="card"><div class="bar" id="chart"></div><p class="muted" style="margin:26px 0 0">תאריך = תחילת השבוע (יום ראשון).</p></div>
     <h2>כל המעגלים</h2>
     <div class="card">
-      <div class="row" style="margin-bottom:6px"><input id="q" placeholder="חיפוש לפי שם / קוד" style="max-width:240px"><select id="ftype"><option value="">כל הסוגים</option><option value="family">משפחתי</option><option value="group">קבוצתי</option></select><select id="fact"><option value="">כל הפעילות</option><option value="1">לפחות משתתף אחד</option><option value="2">לפחות שניים</option><option value="done">הגיעו לשלב 4+</option></select><button class="ghost" id="refresh">רענון</button><button class="ghost" id="csv">הורדת CSV</button></div>
+      <div class="row" style="margin-bottom:6px"><input id="q" placeholder="חיפוש לפי שם / קוד" style="max-width:240px"><select id="ftype"><option value="">כל הסוגים</option><option value="family">משפחתי</option><option value="group">קבוצתי</option></select><select id="fact"><option value="">כל הפעילות</option><option value="1">לפחות משתתף אחד</option><option value="2">לפחות שניים</option><option value="done">הגיעו לשלב 4+</option><option value="dead">נטושים</option></select><button class="ghost" id="refresh">רענון</button><button class="ghost" id="csv">הורדת CSV</button></div>
+      <div class="row" style="margin:4px 0 8px;padding:10px;border:1.5px dashed var(--line2);border-radius:8px">
+        <button class="ghost" id="selDead" type="button">סימון כל הנטושים</button>
+        <button id="delSel" type="button" style="background:#a4513d" disabled>מחיקת המסומנים</button>
+        <label class="ghost" style="display:inline-flex;align-items:center;height:42px;padding:0 14px;border:2px solid var(--teal);border-radius:6px;color:var(--teal);font-weight:700;cursor:pointer">שחזור מגיבוי<input type="file" id="restore" accept=".json,application/json" hidden></label>
+        <span class="muted" id="selInfo">נטוש = עד משתתף/ת אחד/ת, בלי סיומים, הודעות לוח או משוב, ובלי פעילות ביומיים האחרונים. לפני כל מחיקה יורד אוטומטית קובץ גיבוי.</span>
+      </div>
       <div class="tbl"><table><thead><tr>
-        <th data-k="name">שם</th><th data-k="code">קוד</th><th data-k="type">סוג</th><th data-k="created">נפתח</th><th data-k="n">משתתפים</th><th data-k="stage">שלב</th><th data-k="last">פעילות אחרונה</th><th data-k="notes">סיומים</th><th data-k="wall">לוח</th><th data-k="fb">משוב</th><th data-k="via">נפתח עם</th><th>פתיחה</th>
+        <th style="width:28px"><input type="checkbox" id="selAll" aria-label="סימון כל השורות המוצגות"></th><th data-k="name">שם</th><th data-k="code">קוד</th><th data-k="type">סוג</th><th data-k="created">נפתח</th><th data-k="n">משתתפים</th><th data-k="stage">שלב</th><th data-k="last">פעילות אחרונה</th><th data-k="notes">סיומים</th><th data-k="wall">לוח</th><th data-k="fb">משוב</th><th data-k="via">נפתח עם</th><th>פתיחה</th>
       </tr></thead><tbody id="rows"></tbody></table></div>
       <p class="muted" id="count"></p>
     </div>
@@ -86,22 +92,24 @@ const DEST={family:"https://boazbareket1.github.io/family-weave/",group:"https:/
 const $=id=>document.getElementById(id);
 gateInit(()=>load());
 
-let ROWS=[],sortK="last",sortD=-1;
+let ROWS=[],RAW={},SEL=new Set(),sortK="last",sortD=-1;
+const isDead=r=>r.n<=1&&!r.notes&&!r.wall&&!r.fb&&Date.now()-r.last>2*864e5;
 const fmtD=t=>t?new Date(t).toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit",year:"2-digit"})+" "+new Date(t).toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"}):"";
 const ago=t=>{if(!t)return "";const d=(Date.now()-t)/864e5;return d<1?"היום":d<2?"אתמול":`לפני ${Math.floor(d)} ימים`;};
 const STAGE=["הצטרפות","מי אני","המספר שלנו","האתגר","תפקידים","חוטים","חיכוך/סגירה","השנה","סגירה"];
 async function load(){
-  $("rows").innerHTML='<tr><td colspan="12" class="muted">טוען…</td></tr>';
+  $("rows").innerHTML='<tr><td colspan="13" class="muted">טוען…</td></tr>';
   try{
     const r=await fetch(`${DB}/rooms.json?auth=${await authTok()}`);const all=await r.json()||{};
-    if(all&&all.error){$("rows").innerHTML=`<tr><td colspan="12" class="err">אין הרשאה לקרוא את רשימת המעגלים (${all.error}). ודאו שהכללים ב‑Firebase פורסמו ושאתם מחוברים בחשבון המורשה.</td></tr>`;return;}
+    if(all&&all.error){$("rows").innerHTML=`<tr><td colspan="13" class="err">אין הרשאה לקרוא את רשימת המעגלים (${all.error}). ודאו שהכללים ב‑Firebase פורסמו ושאתם מחוברים בחשבון המורשה.</td></tr>`;return;}
+    RAW=all;SEL=new Set([...SEL].filter(c=>all[c]));
     ROWS=Object.entries(all).map(([code,room])=>{
       const m=room.meta||{},mem=Object.values(room.members||{}),notes=Object.values(room.notes||{}),wall=Object.values(room.wall||{}),fb=Object.values(room.fb||{});
       const ts=[m.created||0,...mem.map(x=>x.t||0),...notes.map(x=>x.t||0),...wall.map(x=>x.t||0)];
       return {code,name:m.name||"",type:m.type||"group",created:m.created||0,n:mem.length,stage:m.stage||0,closed:!!m.closed,last:Math.max(...ts),notes:notes.length,wall:wall.length,fb:fb.length,via:m.voucher?(m.voucher==="launch"?"קוד השקה":"שובר "+m.voucher):"מנחה",members:mem.map(x=>x.name).join(", ")};
     });
     render();
-  }catch(e){$("rows").innerHTML='<tr><td colspan="12" class="err">לא הצלחנו לטעון. בדקו חיבור.</td></tr>';}
+  }catch(e){$("rows").innerHTML='<tr><td colspan="13" class="err">לא הצלחנו לטעון. בדקו חיבור.</td></tr>';}
 }
 function kpis(rows){
   const fam=rows.filter(r=>r.type==="family").length,grp=rows.length-fam;
@@ -117,14 +125,43 @@ function chart(rows){
 }
 function filtered(){
   const q=$("q").value.trim().toLowerCase(),t=$("ftype").value,a=$("fact").value;
-  return ROWS.filter(r=>(!q||r.name.toLowerCase().includes(q)||r.code.toLowerCase().includes(q)||r.members.toLowerCase().includes(q))&&(!t||r.type===t)&&(a===""||(a==="done"?r.stage>=4:r.n>=+a)));
+  return ROWS.filter(r=>(!q||r.name.toLowerCase().includes(q)||r.code.toLowerCase().includes(q)||r.members.toLowerCase().includes(q))&&(!t||r.type===t)&&(a===""||(a==="dead"?isDead(r):a==="done"?r.stage>=4:r.n>=+a)));
 }
 function render(){
   kpis(ROWS);chart(ROWS);
   const rows=filtered().sort((x,y)=>(x[sortK]>y[sortK]?1:x[sortK]<y[sortK]?-1:0)*sortD);
-  $("rows").innerHTML=rows.map(r=>`<tr><td title="${r.members.replace(/"/g,"&quot;")}">${r.name.replace(/</g,"&lt;")||'<span class="muted">(ללא שם)</span>'}</td><td class="c">${r.code}</td><td class="${r.type==="family"?"fam":"grp"}">${r.type==="family"?"משפחתי":"קבוצתי"}</td><td>${fmtD(r.created)}</td><td>${r.n}</td><td>${r.stage} · ${STAGE[r.stage]||""}${r.closed?' <span class="muted">(סגור)</span>':""}</td><td title="${fmtD(r.last)}">${ago(r.last)}</td><td>${r.notes}</td><td>${r.wall}</td><td>${r.fb}</td><td>${r.via}</td><td><a href="${DEST[r.type]||DEST.group}?r=${r.code}" target="_blank" rel="noopener">פתיחה ↗</a></td></tr>`).join("")||'<tr><td colspan="12" class="muted">אין מעגלים שמתאימים לסינון.</td></tr>';
-  $("count").textContent=`${rows.length} מתוך ${ROWS.length} מעגלים`;
+  $("rows").innerHTML=rows.map(r=>`<tr${isDead(r)?' style="opacity:.7"':""}><td><input type="checkbox" data-sel="${r.code}" ${SEL.has(r.code)?"checked":""} aria-label="סימון ${r.code}"></td><td title="${r.members.replace(/"/g,"&quot;")}">${r.name.replace(/</g,"&lt;")||'<span class="muted">(ללא שם)</span>'}</td><td class="c">${r.code}</td><td class="${r.type==="family"?"fam":"grp"}">${r.type==="family"?"משפחתי":"קבוצתי"}</td><td>${fmtD(r.created)}</td><td>${r.n}</td><td>${r.stage} · ${STAGE[r.stage]||""}${r.closed?' <span class="muted">(סגור)</span>':""}</td><td title="${fmtD(r.last)}">${ago(r.last)}</td><td>${r.notes}</td><td>${r.wall}</td><td>${r.fb}</td><td>${r.via}</td><td><a href="${DEST[r.type]||DEST.group}?r=${r.code}" target="_blank" rel="noopener">פתיחה ↗</a></td></tr>`).join("")||'<tr><td colspan="13" class="muted">אין מעגלים שמתאימים לסינון.</td></tr>';
+  $("count").textContent=`${rows.length} מתוך ${ROWS.length} מעגלים · נטושים: ${ROWS.filter(isDead).length}`;
+  $("selAll").checked=rows.length>0&&rows.every(r=>SEL.has(r.code));
+  updSel();
 }
+function updSel(){const b=$("delSel");b.disabled=!SEL.size;b.textContent=SEL.size?`מחיקת המסומנים (${SEL.size})`:"מחיקת המסומנים";}
+$("rows").addEventListener("change",e=>{const c=e.target.dataset.sel;if(!c)return;e.target.checked?SEL.add(c):SEL.delete(c);updSel();});
+$("selAll").addEventListener("change",e=>{filtered().forEach(r=>e.target.checked?SEL.add(r.code):SEL.delete(r.code));render();});
+$("selDead").onclick=()=>{ROWS.filter(isDead).forEach(r=>SEL.add(r.code));render();};
+function download(name,obj){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify(obj,null,1)],{type:"application/json"}));a.download=name;document.body.appendChild(a);a.click();a.remove();}
+$("delSel").onclick=async()=>{
+  const codes=[...SEL].filter(c=>RAW[c]);if(!codes.length)return;
+  const live=codes.filter(c=>{const r=ROWS.find(x=>x.code===c);return r&&!isDead(r);});
+  const names=codes.slice(0,8).map(c=>`${c} – ${(RAW[c].meta&&RAW[c].meta.name)||"ללא שם"}`).join("\n");
+  if(!confirm(`למחוק ${codes.length} מעגלים? המחיקה סופית.\n\n${names}${codes.length>8?"\n…":""}${live.length?`\n\nשימו לב: ${live.length} מהם אינם "נטושים" – יש בהם פעילות.`:""}\n\nקובץ גיבוי יירד לפני המחיקה.`))return;
+  const backup={};codes.forEach(c=>backup[c]=RAW[c]);
+  download(`maarag-backup-${new Date().toISOString().slice(0,16).replace(/[:T]/g,"-")}.json`,backup);
+  const b=$("delSel");b.disabled=true;b.textContent="מוחק…";let ok=0,bad=0;const tk=await authTok();
+  for(const c of codes){try{const r=await fetch(`${DB}/rooms/${encodeURIComponent(c)}.json?auth=${tk}`,{method:"DELETE"});r.ok?ok++:bad++;}catch(e){bad++;}}
+  SEL.clear();alert(`נמחקו ${ok} מעגלים${bad?`, ${bad} נכשלו`:""}. קובץ הגיבוי נשמר בתיקיית ההורדות.`);load();
+};
+$("restore").addEventListener("change",async e=>{
+  const f=e.target.files[0];e.target.value="";if(!f)return;
+  let data;try{data=JSON.parse(await f.text());}catch(err){alert("הקובץ לא נקרא כגיבוי תקין.");return;}
+  const codes=Object.keys(data||{}).filter(c=>/^[A-Z0-9]{4,8}$/.test(c)&&data[c]&&data[c].meta);
+  if(!codes.length){alert("לא נמצאו מעגלים בקובץ.");return;}
+  const exist=codes.filter(c=>RAW[c]);
+  if(!confirm(`לשחזר ${codes.length} מעגלים מהגיבוי?${exist.length?`\n${exist.length} מהם קיימים כרגע ויוחלפו בגרסת הגיבוי.`:""}`))return;
+  let ok=0;const tk=await authTok();
+  for(const c of codes){try{const r=await fetch(`${DB}/rooms/${c}.json?auth=${tk}`,{method:"PUT",headers:{"Content-Type":"application/json"},body:JSON.stringify(data[c])});if(r.ok)ok++;}catch(err){}}
+  alert(`שוחזרו ${ok} מתוך ${codes.length} מעגלים.`);load();
+});
 document.querySelectorAll("th[data-k]").forEach(th=>th.onclick=()=>{const k=th.dataset.k;if(sortK===k)sortD=-sortD;else{sortK=k;sortD=k==="name"||k==="code"||k==="type"?1:-1;}render();});
 ["q","ftype","fact"].forEach(id=>$(id).addEventListener("input",render));
 $("refresh").onclick=load;
