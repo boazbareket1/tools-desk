@@ -78,7 +78,7 @@ $("mk").onclick=async()=>{
     let code;for(let i=0;i<5;i++){code=gen();if(!(await req("GET",`vouchers/${code}`)))break;}
     await req("PUT",`vouchers/${code}`,{used:false,created:Date.now(),note:$("note").value.trim().slice(0,80)});
     $("codeOut").textContent=fmt(code);$("out").hidden=false;
-    const msg=`שלום! הנה הקוד שלך לפתיחת מעגל מארג אחד: ${fmt(code)}\nפותחים מעגל משפחתי: https://boazbareket1.github.io/family-weave/new/\nאו קבוצתי: https://boazbareket1.github.io/group-weave/new/\nבדף הפתיחה מקלידים את השובר בשדה "קוד מנחה או שובר". בהצלחה!`;
+    const msg=`שלום! הנה הקוד שלך לפתיחת מעגל מארג אחד: ${fmt(code)}\nפותחים מעגל משפחתי: https://boazbareket1.github.io/family-weave/\nאו קבוצתי: https://boazbareket1.github.io/group-weave/\nבדף הפתיחה מקלידים את השובר בשדה "קוד מנחה או שובר". בהצלחה!`;
     $("waLink").href="https://wa.me/?text="+encodeURIComponent(msg);
     $("copyBtn").onclick=async()=>{try{await navigator.clipboard.writeText(fmt(code));$("copyBtn").textContent="הועתק ✓";}catch(e){prompt("העתיקו:",fmt(code));}};
     $("note").value="";list();

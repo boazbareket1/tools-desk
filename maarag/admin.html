@@ -63,7 +63,7 @@ a{color:var(--teal)}
 <script>
 const DB="https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app";
 const HOST_HASH="c1f916534a33c70e6695a100531090ec79483c0900cf33ac087d01acb145bfc9";
-const DEST={family:"https://boazbareket1.github.io/family-weave/new/",group:"https://boazbareket1.github.io/group-weave/new/"};
+const DEST={family:"https://boazbareket1.github.io/family-weave/",group:"https://boazbareket1.github.io/group-weave/"};
 const $=id=>document.getElementById(id);
 async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
 const OK="menifa-admin-ok";
