@@ -34,13 +34,13 @@ td.c{font-family:var(--f-mono);direction:ltr;text-align:right}
   <p class="muted"><a href="admin.html">← פעילות המעגלים (לוח מנחה)</a></p>
   <p class="muted">דף מנחה. כל שובר פותח מעגל אחד (משפחתי או קבוצתי, לבחירת המקבל/ת) ומסומן כמומש ברגע שהמעגל נפתח.</p>
 
-  <div class="card" id="gate">
-    <label for="hc">קוד מנחה</label>
-    <div class="row"><input id="hc" type="password" autocomplete="off" style="max-width:260px"><button id="hcBtn">כניסה</button></div>
-    <p class="err" id="hcErr"></p>
+  <div class="card" id="gate" style="margin-top:14px">
+    <p style="margin:0 0 10px">הדף פתוח רק לבעלי הכלי. התחברו עם חשבון Google המורשה.</p>
+    <div class="row"><button id="gBtn" type="button">כניסה עם Google</button><span class="err" id="hcErr"></span></div>
   </div>
 
   <div id="panel" hidden>
+    <p class="muted" style="margin:6px 0 0">מחובר/ת: <b id="who"></b> · <button type="button" id="outBtn" style="height:auto;padding:0;background:none;color:var(--teal);border:0;font-weight:400;text-decoration:underline;font-size:.9rem">יציאה</button></p>
     <div class="card">
       <label for="note">למי השובר (לא חובה – רק לזיכרון שלך)</label>
       <input id="note" placeholder="למשל: אורית, מעגל לחברות, שולם בביט 1.11">
@@ -54,21 +54,29 @@ td.c{font-family:var(--f-mono);direction:ltr;text-align:right}
     </div>
   </div>
 </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+/* Google sign-in: the database itself only lets these accounts list circles / manage vouchers (see Firebase rules). */
+firebase.initializeApp({apiKey:"AIzaSyBJ42Obu9iyXYnHmTmLXhCKNoBohbQztVA",authDomain:"group-numerology.firebaseapp.com",databaseURL:"https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app",projectId:"group-numerology",appId:"1:73723083486:web:838839a99a51bd3980a04f"});
+const ALLOWED=["boazbareket1@gmail.com","boazbareket@gmail.com"];
+const authTok=async()=>{const u=firebase.auth().currentUser;return u?await u.getIdToken():""};
+function gateInit(onReady){
+  const g=document.getElementById("gate"),p=document.getElementById("panel"),err=document.getElementById("hcErr"),who=document.getElementById("who");
+  document.getElementById("gBtn").onclick=async()=>{err.textContent="";const pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:"select_account"});
+    try{await firebase.auth().signInWithPopup(pr);}catch(e){if(e&&(e.code==="auth/popup-blocked"||e.code==="auth/operation-not-supported-in-this-environment"))firebase.auth().signInWithRedirect(pr);else if(e&&e.code!=="auth/popup-closed-by-user")err.textContent="ההתחברות לא הצליחה ("+(e.code||e.message)+").";}};
+  document.getElementById("outBtn").onclick=()=>firebase.auth().signOut();
+  firebase.auth().onAuthStateChanged(u=>{
+    if(u&&ALLOWED.includes((u.email||"").toLowerCase())){g.hidden=true;p.hidden=false;who.textContent=u.email;onReady();}
+    else{p.hidden=true;g.hidden=false;if(u){err.textContent="החשבון "+u.email+" לא מורשה לדף הזה.";firebase.auth().signOut();}}
+  });
+}
+</script>
 <script>
 const DB="https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app";
-const HOST_HASH="c1f916534a33c70e6695a100531090ec79483c0900cf33ac087d01acb145bfc9";
 const $=id=>document.getElementById(id);
-async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
-const req=async(m,p,b)=>{const r=await fetch(`${DB}/${p}.json`,{method:m,headers:{"Content-Type":"application/json"},body:b===undefined?undefined:JSON.stringify(b)});if(!r.ok)throw new Error(r.status);return r.json();};
-const OK="menifa-vouchers-ok";
-async function unlock(){
-  const c=$("hc").value.trim();
-  try{if(await sha256(c)===HOST_HASH){localStorage.setItem(OK,HOST_HASH);show();return;}}catch(e){}
-  $("hcErr").textContent="הקוד לא נכון.";
-}
-function show(){$("gate").hidden=true;$("panel").hidden=false;list();}
-$("hcBtn").onclick=unlock;$("hc").onkeydown=e=>{if(e.key==="Enter")unlock();};
-if(localStorage.getItem(OK)===HOST_HASH)show();
+const req=async(m,p,b)=>{const r=await fetch(`${DB}/${p}.json?auth=${await authTok()}`,{method:m,headers:{"Content-Type":"application/json"},body:b===undefined?undefined:JSON.stringify(b)});if(!r.ok)throw new Error(r.status);return r.json();};
+gateInit(()=>list());
 const A="ABCDEFGHJKMNPQRSTUVWXYZ23456789";
 const gen=()=>"MNF"+Array.from({length:6},()=>A[Math.floor(Math.random()*A.length)]).join("");
 const fmt=c=>c.replace(/^MNF/,"MNF-").replace(/^(MNF-\w{3})(\w{3})$/,"$1-$2");

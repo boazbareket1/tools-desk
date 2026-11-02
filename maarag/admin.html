@@ -43,10 +43,12 @@ a{color:var(--teal)}
   <p class="muted">תמונה של כל המעגלים שנפתחו במארג המשפחתי ובמארג הקבוצתי – מתי, כמה משתתפים, עד איזה שלב הגיעו, ומתי הייתה בהם פעילות אחרונה.</p>
 
   <div class="card" id="gate" style="margin-top:14px">
-    <div class="row"><label for="hc"><b>קוד מנחה</b></label><input id="hc" type="password" autocomplete="off" style="max-width:240px"><button id="hcBtn">כניסה</button><span class="err" id="hcErr"></span></div>
+    <p style="margin:0 0 10px">הדף פתוח רק לבעלי הכלי. התחברו עם חשבון Google המורשה.</p>
+    <div class="row"><button id="gBtn" type="button">כניסה עם Google</button><span class="err" id="hcErr"></span></div>
   </div>
 
   <div id="panel" hidden>
+    <p class="muted" style="margin:6px 0 0">מחובר/ת: <b id="who"></b> · <button type="button" id="outBtn" style="height:auto;padding:0;background:none;color:var(--teal);border:0;font-weight:400;text-decoration:underline;font-size:.9rem">יציאה</button></p>
     <div class="kpis" id="kpis"></div>
     <h2>מעגלים חדשים לפי שבוע</h2>
     <div class="card"><div class="bar" id="chart"></div><p class="muted" style="margin:26px 0 0">תאריך = תחילת השבוע (יום ראשון).</p></div>
@@ -60,17 +62,29 @@ a{color:var(--teal)}
     </div>
   </div>
 </div>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script>
+/* Google sign-in: the database itself only lets these accounts list circles / manage vouchers (see Firebase rules). */
+firebase.initializeApp({apiKey:"AIzaSyBJ42Obu9iyXYnHmTmLXhCKNoBohbQztVA",authDomain:"group-numerology.firebaseapp.com",databaseURL:"https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app",projectId:"group-numerology",appId:"1:73723083486:web:838839a99a51bd3980a04f"});
+const ALLOWED=["boazbareket1@gmail.com","boazbareket@gmail.com"];
+const authTok=async()=>{const u=firebase.auth().currentUser;return u?await u.getIdToken():""};
+function gateInit(onReady){
+  const g=document.getElementById("gate"),p=document.getElementById("panel"),err=document.getElementById("hcErr"),who=document.getElementById("who");
+  document.getElementById("gBtn").onclick=async()=>{err.textContent="";const pr=new firebase.auth.GoogleAuthProvider();pr.setCustomParameters({prompt:"select_account"});
+    try{await firebase.auth().signInWithPopup(pr);}catch(e){if(e&&(e.code==="auth/popup-blocked"||e.code==="auth/operation-not-supported-in-this-environment"))firebase.auth().signInWithRedirect(pr);else if(e&&e.code!=="auth/popup-closed-by-user")err.textContent="ההתחברות לא הצליחה ("+(e.code||e.message)+").";}};
+  document.getElementById("outBtn").onclick=()=>firebase.auth().signOut();
+  firebase.auth().onAuthStateChanged(u=>{
+    if(u&&ALLOWED.includes((u.email||"").toLowerCase())){g.hidden=true;p.hidden=false;who.textContent=u.email;onReady();}
+    else{p.hidden=true;g.hidden=false;if(u){err.textContent="החשבון "+u.email+" לא מורשה לדף הזה.";firebase.auth().signOut();}}
+  });
+}
+</script>
 <script>
 const DB="https://group-numerology-default-rtdb.europe-west1.firebasedatabase.app";
-const HOST_HASH="c1f916534a33c70e6695a100531090ec79483c0900cf33ac087d01acb145bfc9";
 const DEST={family:"https://boazbareket1.github.io/family-weave/",group:"https://boazbareket1.github.io/group-weave/"};
 const $=id=>document.getElementById(id);
-async function sha256(t){const b=await crypto.subtle.digest("SHA-256",new TextEncoder().encode(t));return [...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,"0")).join("");}
-const OK="menifa-admin-ok";
-async function unlock(){try{if(await sha256($("hc").value.trim())===HOST_HASH){localStorage.setItem(OK,HOST_HASH);show();return;}}catch(e){}$("hcErr").textContent="הקוד לא נכון.";}
-function show(){$("gate").hidden=true;$("panel").hidden=false;load();}
-$("hcBtn").onclick=unlock;$("hc").onkeydown=e=>{if(e.key==="Enter")unlock();};
-if(localStorage.getItem(OK)===HOST_HASH)show();
+gateInit(()=>load());
 
 let ROWS=[],sortK="last",sortD=-1;
 const fmtD=t=>t?new Date(t).toLocaleDateString("he-IL",{day:"2-digit",month:"2-digit",year:"2-digit"})+" "+new Date(t).toLocaleTimeString("he-IL",{hour:"2-digit",minute:"2-digit"}):"";
@@ -79,7 +93,8 @@ const STAGE=["הצטרפות","מי אני","המספר שלנו","האתגר","
 async function load(){
   $("rows").innerHTML='<tr><td colspan="12" class="muted">טוען…</td></tr>';
   try{
-    const r=await fetch(`${DB}/rooms.json`);const all=await r.json()||{};
+    const r=await fetch(`${DB}/rooms.json?auth=${await authTok()}`);const all=await r.json()||{};
+    if(all&&all.error){$("rows").innerHTML=`<tr><td colspan="12" class="err">אין הרשאה לקרוא את רשימת המעגלים (${all.error}). ודאו שהכללים ב‑Firebase פורסמו ושאתם מחוברים בחשבון המורשה.</td></tr>`;return;}
     ROWS=Object.entries(all).map(([code,room])=>{
       const m=room.meta||{},mem=Object.values(room.members||{}),notes=Object.values(room.notes||{}),wall=Object.values(room.wall||{}),fb=Object.values(room.fb||{});
       const ts=[m.created||0,...mem.map(x=>x.t||0),...notes.map(x=>x.t||0),...wall.map(x=>x.t||0)];
