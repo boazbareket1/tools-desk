@@ -4,6 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>המארג · אישי, משפחתי, קבוצתי</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#0f6b66">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="המארג">
 <meta name="description" content="המארג: מפת מספרים אישית, מארג משפחתי ומארג קבוצתי – בוחרים את המעגל ונכנסים.">
 <meta property="og:title" content="המארג">
 <meta property="og:description" content="מפת מספרים אישית · המארג המשפחתי · המארג הקבוצתי">
@@ -101,6 +107,7 @@ async function enter(){
 }
 btn.onclick=enter;inp.addEventListener("keydown",e=>{if(e.key==="Enter")enter();});
 const q=new URLSearchParams(location.search).get("r");if(q){inp.value=q;enter();}
+if("serviceWorker" in navigator){navigator.serviceWorker.register("/tools-desk/maarag/sw.js");}
 </script>
 </body>
 </html>
